@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+    <title>加入远徒</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+    <style>
+    .flaticon-restaurant{
+      font-style: normal;
+      display: block;
+      width: 50px;
+      height: 50px;
+      font-size: 25px;
+      margin: 5px auto 10px auto;
+      text-align: center;
+      line-height: 50px;
+      border: 2px solid #ccc;
+      border-radius: 50%;
+      color: #f59923;
+      border-color: #f59923;
+    }
+    #about_us,#story{
+      padding: 10px;
+    }
+     #about_us h3{
+       text-align: center;
+       margin-bottom: 20px;
+       letter-spacing: 6px;
+       color: #262930;
+       font-family: "Open Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", 微软雅黑, sans-serif;
+     }
+     #about_us h4{
+       text-align: center;
+       color: #262930;
+       font-family: "Open Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", 微软雅黑, sans-serif;
+     }
+    #about_us p{
+      /*font-size: 13px;
+      color: #666;
+      line-height: 25px;
+      text-indent: 0;
+      margin-bottom: 20px;*/
+      font-size: 14px;
+      text-indent: 2em;
+      color: rgb(102, 102, 102);
+      margin-bottom: 64px;
+      line-height: 24px;
+      font-family: "Open Sans", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", 微软雅黑, sans-serif;
+    }
+    #story p{
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+      line-height: 30px;
+    }
+    </style>
+</head>
+<body>
+  <!--banner-->
+  <div class="swiper-container swiper-container-horizontal">
+      <img src="img/banner0.png" width="375" height="200" style="display: block">
+  </div>
+<!--banner end-->
+<div class="bannerContent">
+  <div class="change-tab">
+    <div class="eachTab active"> 
+        职位招聘
+    </div>
+    <!--<div class="eachTab"> 
+        员工故事
+    </div>-->
+    <div class="eachTab"> 
+        关于我们
+    </div>
+  </div>
+  <div class="tabContent">
+    <div class="eachContent" id="tab1">
+      <div class="weui-panel__bd">
+        <a href="GM.html" class="weui-media-box weui-media-box_appmsg">
+          <div class="weui-media-box__hd">
+            <i class="flaticon-restaurant">GM</i>
+          </div>
+          <div class="weui-media-box__bd">
+            <h4 class="weui-media-box__title">副总经理</h4>
+            <p class="weui-media-box__desc">收集、分析与整理区域目标市场的客户需求和行业动态，为公司提供市场决策;</p>
+          </div>
+        </a>
+        <a href="OD.html" class="weui-media-box weui-media-box_appmsg">
+          <div class="weui-media-box__hd">
+            <i class="flaticon-restaurant">OD</i>
+          </div>
+          <div class="weui-media-box__bd">
+            <h4 class="weui-media-box__title">运营总监</h4>
+            <p class="weui-media-box__desc">全面负责公司户外运动运营中心的整体运营工作</p>
+          </div>
+        </a>
+        <a href="MS.html" class="weui-media-box weui-media-box_appmsg">
+          <div class="weui-media-box__hd">
+            <i class="flaticon-restaurant">MS</i>
+          </div>
+          <div class="weui-media-box__bd">
+            <h4 class="weui-media-box__title">销售总监</h4>
+            <p class="weui-media-box__desc">有较强的组织能力及领导管理能力</p>
+          </div>
+        </a>
+        <a href="PD.html" class="weui-media-box weui-media-box_appmsg">
+          <div class="weui-media-box__hd">
+            <i class="flaticon-restaurant">PD</i>
+          </div>
+          <div class="weui-media-box__bd">
+            <h4 class="weui-media-box__title">推广总监</h4>
+            <p class="weui-media-box__desc">策划并组织实施网络平台的整体营销推广，提升平台自身营销能力</p>
+          </div>
+        </a>
+        <a href="BD.html" class="weui-media-box weui-media-box_appmsg">
+          <div class="weui-media-box__hd">
+            <i class="flaticon-restaurant">BD</i>
+          </div>
+          <div class="weui-media-box__bd">
+            <h4 class="weui-media-box__title">商业总监</h4>
+            <p class="weui-media-box__desc">根据公司整体发展战略及目标，结合公司产品以及业务特性创新商业模式，拓展对外商务合作渠道，维护合作伙伴的关系；</p>
+          </div>
+        </a>
+        <a href="PI.html" class="weui-media-box weui-media-box_appmsg">
+          <div class="weui-media-box__hd">
+            <i class="flaticon-restaurant">PI</i>
+          </div>
+          <div class="weui-media-box__bd">
+            <h4 class="weui-media-box__title">户外领队</h4>
+            <p class="weui-media-box__desc">具有敏锐洞察市场需求并进行分析，收集整理、设计、开辟最新户外线路，研发户外活动项目；</p>
+          </div>
+        </a>
+        <a href="AM.html" class="weui-media-box weui-media-box_appmsg">
+          <div class="weui-media-box__hd">
+            <i class="flaticon-restaurant">AM</i>
+          </div>
+          <div class="weui-media-box__bd">
+            <h4 class="weui-media-box__title">客户经理</h4>
+            <p class="weui-media-box__desc">负责公司客户开拓和维护工作；对客户需求进行处理和跟进，维护现有客户、开发潜在客户</p>
+          </div>
+        </a>
+        <a href="AC.html" class="weui-media-box weui-media-box_appmsg">
+          <div class="weui-media-box__hd">
+            <i class="flaticon-restaurant">AC</i>
+          </div>
+          <div class="weui-media-box__bd">
+            <h4 class="weui-media-box__title">行政计调</h4>
+            <p class="weui-media-box__desc">负责办公室行政相关工作，接待游客的咨询；旅游线路的编排、设计，安排团队运行、人员管理、及后勤保障</p>
+          </div>
+        </a>
+        <a href="TS.html" class="weui-media-box weui-media-box_appmsg">
+          <div class="weui-media-box__hd">
+            <i class="flaticon-restaurant">TS</i>
+          </div>
+          <div class="weui-media-box__bd">
+            <h4 class="weui-media-box__title">培训拓展人员</h4>
+            <p class="weui-media-box__desc">对企业员工分普通员工及管理人员分类培训</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <!--<div class="eachContent hide" id="tab2">
+
+    </div>-->
+    <div class="eachContent hide" id="tab3">
+      <div class="weui-panel__bd" id="about_us">
+        <h3 style="margin-bottom: 0;margin-top: 30px;">关于我们</h3>
+        <h4 style="margin-bottom: 20px;">About Us</h4>
+					<!--<p>成立于2016年，是原创梦想与追逐未来的结合。我们都有让心灵腾空，让身体与灵魂统一的梦和过往。我们曾行走在雪域高原、戈壁沙漠、深丘峡谷与丛林阳光；我们曾从凌晨走到黄昏，从风雪走向灿烂。在路上，在途中，成就着友谊、爱情与事业；尽管每到曲终人散的时候，总能收获那么多的苦与累，伤与痛，离去与重逢！</p>
+					<p>我们尝试将户外做成一种事业，做成一种心愿，做成一种生活的方式；让更多的人参与到创造快乐与享受成长中来；并与更多的人分享成长的快乐。我们曾从事过的旅游、探险、互联网甚至地产的工作，直至今日，我们收获了丰富的事业经验和相应资源来支撑远徒的成长。</p>
+					<p>试图用开放的思维、专业的视角、系统的资源和共享的平台；在户外的产业链条上，创造属于这个市场的荣耀；我们走在路上，走向目标，尽管未来会经历四季的冷暖和更替！</p>
+					<p>我们坚持：</p>
+					<p>为那些喜欢户外的人们，制造权威、标准、值得信赖的一站式全程服务；</p>
+					<p>为那些喜欢户外的人们，制造一个可以分享和收获的社区交流平台；</p>
+					<p>为那些喜欢户外的人们，制造一个心灵的家园。</p>
+					<p>同时，我们不断学习，用我们亲自丈量过的风景和那些面对面的团聚；用互联网、云端服务、微信、小程序等搭建的共享平台，用我们创新与建立的专业标准；来保障您与 [远徒户外] 越行越美的征途！</p>
+					<p>这就是远徒，交织着小梦想、小文化、小期许和小玩家的一个专业平台！</p>
+					<p style="margin-bottom: 10px">我们期待着您和他（她）的加入，支持，以及同行的机遇！</p> 
+					<h3>心在远方，行在徒中 ！</h3>
+          <h3>愿我们一路同行！</h3>
+          <h3>一路成长！</h3>-->
+          <p>成立于2016年，是原创梦想与追逐未来的结合。我们都有让心灵腾空，让身体与灵魂统一的梦和过往。我们曾行走在雪域高原、戈壁沙漠、深丘峡谷与丛林阳光；我们曾从凌晨走到黄昏，从风雪走向灿烂。
+            在路上，在途中，成就着友谊、爱情与事业；尽管每到曲终人散的时候，总能收获那么多的苦与累，伤与痛，离去与重逢！我们尝试将户外做成一种事业，做成一种心愿，做成一种生活的方式；让更多的人参与到创造快乐与享受成长中来；并与更多的人分享成长的快乐。
+          我们曾从事过的旅游、探险、互联网甚至地产的工作，直至今日，我们收获了丰富的事业经验和相应资源来支撑远徒的成长。
+					试图用开放的思维、专业的视角、系统的资源和共享的平台；在户外的产业链条上，创造属于这个市场的荣耀；我们走在路上，走向目标，尽管未来会经历四季的冷暖和更替！</p>
+					<h3>我们坚持</h3>
+					<p>为那些喜欢户外的人们，制造权威、标准、值得信赖的一站式全程服务；
+					为那些喜欢户外的人们，制造一个可以分享和收获的社区交流平台；为那些喜欢户外的人们，制造一个心灵的家园。</p>
+          <h3>我们不断学习</h3>
+					<p>用我们亲自丈量过的风景和那些面对面的团聚；用互联网、云端服务、微信、小程序等搭建的共享平台，用我们创新与建立的专业标准；来保障您与[远徒户外]越行越美的征途！</p>
+          <h3>这就是远徒</h3>
+					<p>交织着小梦想、小文化、小期许和小玩家的一个专业平台！我们期待着您和他（她）的加入，支持，以及同行的机遇！心在远方，行在徒中 ！愿我们一路同行！一路成长！</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- body 最后 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/js/swiper.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/fastclick.js"></script>
+<script>
+  $(function() {
+
+    FastClick.attach(document.body);
+    
+    //tab切换
+    $('.eachTab').on('click', function () {
+        var $this = $(this);
+        var index = $this.index();
+        $this.addClass('active').siblings('div').removeClass('active');
+        $(".eachContent").eq(index).removeClass("hide").siblings('div').addClass('hide')
+    });
+  });
+</script>
+</body>
+</html>

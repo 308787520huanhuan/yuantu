@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+    <title>游记列表</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <style>
+    .aaUserContent{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px;
+        background: #f7f7f7;
+    }
+    .aaUserContent .weui-btn_plain-primary{
+        font-size: 14px;
+        position: relative;
+        border-radius: 0;
+        color: #f59923;
+        border: 1px solid #f59923;
+    }
+    .noData{
+        padding: 20px;
+        text-align: center;
+        color: #ccc;
+    }
+    .mainContanier{
+        padding: 10px;
+    }
+    .eachContent{
+        border-radius: 5px;
+        background-size:cover; 
+        height: 100px;
+        color: #f2f2f2;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: relative;
+    }
+    .eachContent > *{
+        position: absolute;
+    }
+    .eachContent .overlay {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #2a2d36;
+        opacity: .54;
+        z-index: 0;
+        border-radius: 5px;
+    }
+    .eachContent h5{
+        font-weight: normal;
+        font-size: 16px;
+    }
+    .eachContent .status{
+        font-size: 20px;
+        right: 10px;
+        top:10px;
+    }
+    .eachContent p{
+        font-size: 13px;
+        top: 35px;
+    }
+    .bottomContent{
+        position: absolute;
+        bottom: 0;
+        left: 10px;
+        font-size: 13px;
+        display: flex;
+    }
+    .bottomContent i{
+        font-size: 16px;
+        margin-right: 5px;
+    }
+    .bottomContent .leftPart{
+        margin:0 20px;
+    }
+    .bottomContent .delete{
+        flex: 1;
+    }
+    </style>
+</head>
+<body>
+    <!--banner end-->
+    <div class="mainContanier">
+    </div>
+    <div class="aaUserContent">
+        <a href="javascript:void(0)" class="weui-btn weui-btn_plain-primary">
+            <form class="form-horizontal" enctype="multipart/form-data" method="post" action="javascript:;" role="form" id="frmUploadFile">
+                <i class="fa fa-plus"></i>写游记
+                <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" name="file">    
+            </form>
+        </a>
+    </div>
+
+<!-- body 最后 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/js/swiper.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="../pc/js/tools.js"></script>
+<script src="js/fastclick.js"></script>
+<script>
+  $(function() {
+    FastClick.attach(document.body);
+  });
+</script>
+<script type="text/javascript">
+
+var $mainContanier = $(".mainContanier");
+
+var $page = $("body");
+
+//当前登录的用户Id
+var userId = $.cookie('userId');
+
+//删除游记
+$mainContanier.on("click",'.delete',function(ev)
+{
+    var $this = $(this);
+    var id = $this.closest(".eachContent").data('id');
+    
+    $.confirm("你确定要删除该游记吗？", function() 
+    {
+        //点击确认后的回调函数
+        $.ajax
+        ({
+            type:'get',
+            url:'/views/index/deleteArticle',
+            data:{'id':id},
+            success: function(data)
+            {
+                if(data.code == 200)
+                {
+                    $.alert("删除成功",function()
+                    {
+                        getArticleList(userId);
+                    });
+                }else{
+                    $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+                }
+            },
+            error: function()
+            {
+                $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+            }
+
+        })
+
+    });
+
+    ev.stopPropagation();
+})
+.on("click",".eachContent",function()
+{
+    //将游记的ID缓存起来
+    $.cookie("articleId",$(this).data('id'));
+
+    //编辑游记
+    location.href = "articleInfo.html";
+})
+
+//上传头像
+$("#uploaderInput").on('change',function()
+{
+    //选择取消 就不请求上传
+    if($(this).prop("value").length > 0)
+    {
+        var formData = new FormData($("#frmUploadFile")[0]);
+        
+        $.ajax
+        ({
+            url:'/uploadArticle',
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(data)
+            {
+                if(200 === data.code) 
+                {
+                    $.cookie("article_url",data.msg.url);
+                    $.cookie("model","add");
+                    location.href = "addArticle.html";
+                } 
+                else 
+                {
+                    $.alert("上传失败,请稍后重试");
+                }
+            },
+            error: function()
+            {
+                $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+            }
+        });
+    }
+
+})
+
+//获得游记列表
+getArticleList(userId);
+
+//获得当前登录用户已经添加过的用户信息列表
+function getArticleList(userId)
+{
+    $.ajax
+    ({
+        type:'get',
+        url:'/views/index/getArticleList',
+        data:{'userId':userId},
+        success: function(data)
+        {
+            var $raiderList = $(".mainContanier");
+            var list = "";
+            $raiderList.empty();
+            if(data.length > 0)
+            {
+                //首页只有六条数据
+                $.each(data,function()
+                {
+                    var value = this;
+                    var status = this.status == 1 ? '<div class="status" style="color:#f59923">待审核</div>':'';
+                    list += '<div data-id='+value.id+' class="eachContent" style="background-image: url('+value.background_img+')"><div class="overlay"></div><h5>'+value.title+'</h5>'+status+'<p>'+value.add_time+'</p><div class="bottomContent"><div class="delete"><i class="fa  fa-trash-o"></i></div></div></div>'
+                })
+                $raiderList.append(list);
+            }
+            else
+            {
+                $raiderList.append('<p class="noData">您还没写过游记</p>'); 
+            }
+        },
+         error: function()
+         {
+            $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+         }
+  })
+}
+
+</script>
+</body>
+</html>

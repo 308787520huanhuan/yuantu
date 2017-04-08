@@ -1,0 +1,11 @@
+{
+  "yuantu_db": {
+    "host":"47.93.76.191",
+    "port": 3306,
+    "user": "root",
+    "password": "Yuantu!@#",
+    "database": "yuantu",
+    "charset": "utf8",
+    "connectionLimit": 6
+  }
+}

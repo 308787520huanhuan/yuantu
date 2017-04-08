@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../wx/css/reset.css">
+    <link rel="stylesheet" href="../wx/css/index.css">
+    <!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/font-awesome.css">
+
+    <style>
+    .mainContanier{
+        padding-top: 0 !important;
+        width: 900px;
+        margin: 45px auto;
+        border: 1px solid #eee;
+        border-bottom: none;
+    }
+    .headerTop,.pay-content{
+        width: 900px;
+        margin: 0 auto;
+        border: 1px solid #eee;
+    }
+    /***购买商品的界面***/
+    #purchasePage{
+      padding-bottom: 40px;
+      color: #373737;
+    }
+    .hasHeaderTop .mainContanier {
+        padding-bottom: 50px;
+    }
+    #purchasePage .product-content{
+      padding: 0 15px;
+    }
+
+    #purchasePage .pay-content{
+      position: fixed;
+      z-index: 1000;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      line-height: 40px;
+      color: #fff;
+    }
+    #purchasePage .pay-content .total-content{
+      background: #f59923;
+      width: 60%;
+      text-align: center;
+      float: left;
+    }
+    #purchasePage .pay-content .payBtn{
+      background: red;
+      width: 40%;
+      text-align: center;
+      float: left;
+      cursor: pointer;
+    }
+    .selectNum{
+      margin-top: 8px;
+    }
+    .selectNum .num{
+      width: 20px;
+    }
+    .selectNum .oper{
+      width: 20px;
+      height: 20px;
+      line-height: 16px;
+      text-align: center;
+      border: 1px solid #f59923;
+      cursor: pointer;
+    }
+      .weui-cells:before {
+          border-top: none;
+      }
+      .weui-media-box__title{
+        font-size: 14px;
+        color: #373737;
+      }
+      /**商品推荐**/
+      /*.goodsContent{
+        border-top:1px solid #eee;
+      }*/
+      .recommendTitlte{
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        font-size: 14px;
+        border-top: 1px solid #F7F7F7;
+      }
+      .product-content .title{
+        font-size: 14px;
+        padding: 10px 0;
+      }
+      .product-img{
+        height: 200px;
+        margin-right: 80px;
+      }
+      
+    </style>
+</head>
+<body id="purchasePage" class="hasHeaderTop">
+  <!--banner-->
+  <div class="headerTop">
+      <div class="leftPart">
+          <i class="fa fa-angle-left fa-lg"></i>
+      </div>
+      <div class="title">
+          订单确认
+      </div>
+      <div class="rightPart"></div>
+  </div>
+  <div class="pay-content">
+    <div class="total-content">合计：<span id="total-price">0.00</span></div>
+    <div class="payBtn">提交订单</div>
+  </div>
+  <div class="mainContanier">
+    <!--用户列表-->
+    <div class="userList">
+      
+    </div>
+    <p class="recommendTitlte">
+      <span class="main-color">/*</span>为
+      <span class="main-color">*</span>你
+      <span class="main-color">*</span>推
+      <span class="main-color">*</span>
+      荐<span class="main-color">*/</span>
+    </p>
+    <!--用户列表 over-->
+    <div class="goodsContent">
+      
+    </div>
+    
+  </div>
+  
+
+<!-- body 最后 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="../wx/js/jquery-weui.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="../wx/js/fastclick.js"></script>
+<script>
+  $(function() {
+    FastClick.attach(document.body);
+  });
+</script>
+<script type="text/javascript">
+  var $tab1 = $("#tab1");
+  var $purchasePage = $("#purchasePage");
+  var $total_price = $("#total-price");
+
+  //选择的用户列表
+  var userIdArr = $.cookie('userIdArr').split(',');
+  var userNum = userIdArr.length;
+  
+  //当前活动的Id
+  var activityId = $.cookie('activityId');
+  var userId = $.cookie('userId');
+  var packageId = $.cookie('packageId');
+  var activityPrice = $.cookie('activityPrice');
+  var userLenth = userIdArr.length;
+
+  //订单总价
+  var userTotalPrice = activityPrice * userLenth;
+
+
+  //2-3人 98折 4-5人:95折 6-7人：85折
+  // if( userNum >= 2 && userNum <=3){
+  //   userTotalPrice *= 0.98
+  // } else if(userNum >= 4 && userNum <=5){
+  //   userTotalPrice *= 0.95
+  // } else if(userNum >=6 ){
+  //   userTotalPrice *= 0.85
+  // }
+
+  //合计价格
+  $total_price.text(userTotalPrice);
+
+
+  //获得所选择的用户的信息列表
+  getUserClientInfo(userIdArr);
+
+  getGoodsList();
+
+
+  //点击加减的时候
+  $purchasePage.on('click','.selectNum span',function(){
+    var $this = $(this);
+    var $eachGoodContent = $this.closest(".eachGoodContent");
+    var $input = $this.siblings('input');
+    var num = parseInt($input.val());
+
+    //单价
+    var price = parseInt($this.closest(".chooseGoodsNum").data('price'));
+
+    //减
+    if($this.hasClass('del') && num != 0)
+    {
+      --num;
+      userTotalPrice -= price;
+    }
+    //加
+    else if($this.hasClass('add'))
+    {
+      ++num;
+      userTotalPrice += price;
+    }
+    //input赋值
+    $input.val(num);
+    //记录选了几个
+    $eachGoodContent.data('num',num);
+    //总价显示
+    $total_price.text(userTotalPrice);
+
+  })
+
+  //点击提交订单
+  $(".payBtn").on('click',function(){
+    //商品列表
+    var $goodsLIst = $(".eachGoodContent");
+    
+    //当前时间戳
+    var timestamp = Tools.getDateTime(Date.parse(new Date())); 
+
+    //构建参数
+    var parameter = {};
+
+    //商品信息 对象数组
+    //{id:'',num:''}
+    var goods = [];
+
+    $goodsLIst.each(function(){
+      var $this = $(this);
+      var obj = {};
+      var num = $this.data('num');
+      if(num != 0){
+        obj.num = num;
+        obj.id = $this.data('id');
+        goods.push(obj);
+      }
+    })
+
+    //选择的用户
+    //user_client 表的id 数组
+    parameter.users = userIdArr;
+    parameter.goods = goods;
+    
+    //状态 新增的订单应该是1：待付款
+    parameter.status = 1;
+    
+    //总价
+    parameter.price = userTotalPrice;
+    
+    //订单生成时间
+    parameter.addtime = timestamp;
+    
+    //活动套餐ID
+    parameter.activity_package_id = packageId;
+    parameter.activity_id = activityId;
+    parameter.user_id = userId;
+
+    //提交订单请求
+    $.ajax({
+      type:'get',
+      url:'/views/index/addOrder',
+      data:parameter,
+      success: function(data){
+        if(data.code==200){
+          $.alert("操作成功")
+        }
+        
+      }
+    })
+    
+
+  })
+
+  //获得商品列表
+  function getGoodsList(){
+    $.ajax({
+        type:'get',
+        url:'/views/index/getGoodsList',
+        success: function(data){
+          var $raiderList = $(".goodsContent");
+          var list = "";
+          if(data.length > 0){
+            $raiderList.empty();
+
+            $.each(data,function(){
+              var value = this;
+              list += '<div class="eachGoodContent" data-id="'+value.id+'" data-num="0">'+
+                      '<div class="product-content">'+
+                      '<p class="title">'+value.name+'</p>'+
+                      '<div class="img-content">'+
+                      '<img src="'+value.icon1+'" alt="" class="product-img">'+
+                      '<img src="'+value.icon2+'" alt="" class="product-img">'+
+                      '<img src="'+value.icon3+'" alt="" class="product-img">'+
+                      '</div>'+
+                      '</div>'+
+                      '<div class="weui-form-preview__hd">'+
+                      '<div class="weui-form-preview__item chooseGoodsNum" data-price="'+value.price+'">'+
+                      '<label class="weui-form-preview__label main-color">¥'+value.price+'</label>'+
+                      '<div class="selectNum pull-right weui-flex">'+
+                      '<span class="del weui-flex__item oper">-</span>'+
+                      '<input type="text" name="" value="0" class="num weui-flex__item">'+
+                      '<span class="add weui-flex__item oper">+</span>'+
+                      '</div>'+
+                      '</div>'+
+                      '</div>'+
+                      '</div>'
+            })
+            $raiderList.append(list);
+          }
+        }
+      })
+  }
+  
+  function getUserClientInfo(userIdArr){
+    $.ajax({
+      type:'get',
+      url:'/views/index/getUserClientInfo',
+      data:{'userIdArr':userIdArr},
+      success: function(data){
+        var $raiderList = $(".userList");
+        var list = "";
+        if(data.length > 0){
+          $raiderList.empty();
+
+          $.each(data,function(){
+            var value = this;
+            var sex = value.sex == 0 ? '男':'女';
+            list += '<a href="#" class="weui-media-box weui-media-box_appmsg">'+
+                    '<div class="weui-media-box__bd">'+
+                    '<h4 class="weui-media-box__title">' + value.name + '&nbsp;&nbsp;' + value.phone +'&nbsp;&nbsp;'+ value.sex +'</h4>'+
+                    '<p class="weui-media-box__desc">' + value.id_card + ' 紧急电话：'+ value.merge_phone +'</p></div></a>'
+          })
+          $raiderList.append(list);
+        }
+      }
+
+    })
+  }
+
+  //返回按钮
+  $(".headerTop").on('click','.fa-angle-left',function(){
+      history.back();
+  })
+
+</script>
+</body>
+</html>

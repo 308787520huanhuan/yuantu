@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <title>立即出发</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+    <!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+    <style>
+    .weui-loadmore{
+      padding-bottom: 1.5em;
+      color: #999;
+    }
+    </style>
+</head>
+<body>
+  <div class="weui-panel__bd">
+    
+  </div>
+
+<!-- body 最后 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/fastclick.js"></script>
+<script>
+  $(function() {
+    FastClick.attach(document.body);
+  });
+</script>
+<script type="text/javascript">
+//请求最新活动
+  $.ajax({
+    type:'get',
+    url:'/views/index/getActivityList',
+    success: function(data){
+      var $list = $(".weui-panel__bd");
+      var list = "";
+      if(data.length > 0){
+        $list.empty()
+        $.each(data,function(){
+          list += '<a href="javascript:void(0)" class="weui-media-box weui-media-box_appmsg newest_activity" data-id='+this.id+' data-url='+this.article_url+' data-price='+this.price+'>'+
+                  '<div class="weui-media-box__hd">'+
+                  '<img class="weui-media-box__thumb" src="'+this.icon+'" width="60" height="60">'+
+                  '</div>'+
+                  '<div class="weui-media-box__bd">'+
+                  '<h4 class="weui-media-box__title">'+this.title+'</h4>'+
+                  '<p class="weui-media-box__desc">'+this.summary+'</p>'+
+                  '</div>'+
+                  '</a>'
+        })
+        $list.append(list+'<div class="weui-loadmore"><span class="weui-loadmore__tips">没有更多数据</span></div>');
+      }
+    }
+
+  })
+  //点击跳转
+  $("body").on("click",'a',function(){
+    var $this = $(this);
+
+    //将活动id缓存起来
+    //$.cookie("activityId", $this.data('id'), { path: '/', expiress: 7 });
+
+    location.href = "productDetail.html?activityId="+$this.data('id')+"";
+  })
+
+  
+</script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>后台管理系统</title>
+<link href="/pay-admin/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="/pay-admin/css/londinium-theme.min.css" rel="stylesheet"
+	type="text/css"/>
+<link href="/pay-admin/css/styles.min.css" rel="stylesheet" type="text/css"/>
+<link href="/pay-admin/css/icons.min.css" rel="stylesheet" type="text/css"/>
+
+<script type="text/javascript" src="/pay-admin/js/jquery/1.10.1/jquery.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/jquery/1.10.2/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/charts/sparkline.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/uniform.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/select2.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/inputmask.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/autosize.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/inputlimit.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/listbox.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/multiselect.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/validate.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/tags.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/switch.min.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/forms/uploader/plupload.full.min.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/forms/uploader/plupload.queue.min.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/interface/daterangepicker.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/interface/fancybox.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/interface/prettify.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/interface/moment.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/interface/jgrowl.min.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/interface/datatables.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/interface/colorpicker.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/interface/fullcalendar.min.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/interface/timepicker.min.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/interface/collapsible.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/application.js"></script>
+</head>
+<body class="full-width page-condensed">
+<div class="navbar navbar-inverse" role="navigation">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse"
+			data-target=".navbar-right">
+			<span class="sr-only">Toggle navbar</span><i class="icon-grid3"></i>
+		</button>
+<a class="navbar-brand" href="/pay-admin/">
+	<img id="headerLogoImg" />
+</a>
+
+<script>
+var hostName = location.hostname;
+if('mgr.citywemedia.cn'==hostName){
+	document.getElementById("headerLogoImg").setAttribute("src", "/pay-admin/images/logo_citywemedia.png");
+}else{
+	document.getElementById("headerLogoImg").setAttribute("src", "/pay-admin/images/logo.png");
+}
+</script> 
+		
+	</div>
+</div>
+<!-- /navbar --> 
+<!-- /fixed top -->
+<!-- Login wrapper -->
+	<div class="login-wrapper">
+		<form action="../login/login" class="row-fluid" method="post">
+			<div class="popup-header">
+				<span class="text-semibold">用户登录</span>
+			</div>
+			<div class="well">
+				<div class="form-group has-feedback">
+					<label>用户名</label><input type="text" class="form-control" name="userName"
+						placeholder="username" value="<%= userName%>" required></input><i
+						class="icon-users form-control-feedback"></i>
+				</div>
+				<div class="form-group has-feedback">
+					<label>密 码</label>
+					<input type="password" class="form-control" name="passWord"
+						placeholder="password" value="<%= passWord%>" required></input><i
+						class="icon-lock form-control-feedback"></i>
+				</div>
+				
+				<div class="form-group has-feedback">
+					<label>验证码</label>
+					<div class="row">
+						<div class="col-xs-7">
+              <input type="text" inputmode="numeric" pattern="[0-9]*" name="verifyCode" placeholder="验证码" class="form-control"></input>
+						</div>
+						<div class="col-xs-5">
+							<!-- <span class="help-block">7 + 5 - 12 = ?</span> -->
+							<img id="verifyCodeImg" src="" width="100%" style="cursor:pointer"/>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row form-actions">
+					<div class="col-xs-6">
+					<!-- 
+						<div class="checkbox checkbox-success">
+							<label><input type="checkbox" class="styled">Remember
+								me</label>
+						</div>
+					-->
+					</div>
+					<div class="col-xs-6">
+						<button type="submit" class="btn btn-warning pull-right">
+							<i class="icon-menu2"></i>登 录
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- /login wrapper -->
+	
+	<script>
+	$("#verifyCodeImg").on("click",function(){//刷新验证码
+		//$(this).attr("src", "./getVerifyCode?"+(new Date()).getTime());
+	});
+	<% if(err) { %>
+        alert("<%= err %>");
+    <%} %>
+	
+	</script>
+	
+	
+
+<!-- Footer -->
+<div class="footer clearfix">
+	<div class="pull-right icons-group">
+		<a href="javascript:void(0)"><i class="icon-screen2"></i></a> <a
+			href="javascript:void(0)"><i class="icon-balance"></i></a> <a
+			href="javascript:void(0)"><i class="icon-cog3"></i></a>
+	</div>
+</div>
+<!-- /footer -->
+</body>
+</html>

@@ -1,0 +1,8 @@
+body {
+  padding: 10px;
+}
+.list {
+  border-collapse: collapse;
+  font: 20px "Lucida Grande", Helvetica, Arial, sans-serif;
+  color: #2c77ba;
+}

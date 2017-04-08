@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+    <title>游记</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <style>  
+        .mainContanier{
+            padding: 20px 10px;
+            padding-top:55px !important; 
+        }
+        .articleBaseInfo{
+            color: #666;
+        }
+        .articleBaseInfo > span{
+            margin-right: 10px;
+        }
+        .articleBaseInfo > span.name{
+            color:dodgerblue
+        }
+        .articleContent {
+            padding: 10px 0;
+        }
+        .articleContent p{
+            line-height: 25px;
+            text-indent: 10px;
+        }
+        .articleContent img{
+            width: 100%;
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body class="hasHeaderTop">
+    <div class="headerTop">
+        <div class="leftPart">
+            <i class="fa fa-angle-left"></i>
+        </div>
+        <div class="title">
+            我的游记
+        </div>
+        <div class="rightPart">
+           操作
+        </div>
+    </div>
+    <!--banner end-->
+    <div class="mainContanier">
+        <div class="top">
+            <h2 data-id="title">
+                
+            </h2>
+            <p class="articleBaseInfo">
+                <span data-id="add_time"></span>
+                <span class="name" data-id="nickname"></span>
+                <span>阅读 <span data-id="count_of_view"></span></span>
+            </p>
+        </div>
+        <div class="articleContent">
+
+        </div>
+    </div>
+<!-- body 最后 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/js/swiper.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="../../pc/js/tools.js"></script>
+<script type="text/javascript">
+//当前登录的用户Id
+var articleId = $.cookie('articleId');
+
+var $top = $(".top");
+
+var $articleContent = $(".articleContent");
+
+//获得文章详情
+getAriticleInfo();
+
+//点击完成
+$(".rightPart").on('click',function()
+{
+    $.actions
+    ({
+        actions: [{
+            text: "编辑",
+            onClick: function() 
+            {
+                $.cookie("model","edit");
+                location.href = "addArticle.html";
+            }
+        },{
+            text: "删除",
+            onClick: function() 
+            {
+                $.confirm("你确定要删除该游记吗？", function() 
+                {
+                    //点击确认后的回调函数
+                    $.ajax
+                    ({
+                        type:'get',
+                        url:'/views/index/deleteArticle',
+                        data:{'id':articleId},
+                        success: function(data)
+                        {
+                            if(data.code == 200)
+                            {
+                                $.alert("删除成功",function()
+                                {
+                                    location.href = "articleList.html";
+                                });
+                            }else{
+                                $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+                            }
+                        },
+                        error: function()
+                        {
+                            $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+                        }
+
+                    })
+
+                });
+            }
+        }]
+    });
+})
+
+//返回按钮
+$(".headerTop").on('click','.leftPart',function()
+{
+    location.href = "articleList.html";
+})
+//获得当前登录用户已经添加过的用户信息列表
+function getAriticleInfo(){
+   $.ajax
+    ({
+        url:'/views/index/getArticleInfo',
+        type: 'POST',
+        data: {"articleId":articleId},
+        success: function(data)
+        {
+            if (200 === data.code) 
+            {
+
+                //基本信息
+               for (var op in data)
+               {
+                   var $target = $top.find("[data-id="+op+"]");
+                   if ($target) 
+                   {
+                       $target.html(data[op])
+                   }
+               }
+               var content = data.content;
+               if (content.length > 0)
+               {
+                   var contentList = "";
+                   $.each(content,function()
+                   {
+                       var text = this.content == null ? "" : this.content;
+                       contentList += "<p>"+text+"</p><img src="+this.img+">";
+                   })
+                   $articleContent.append(contentList);
+               }
+            } 
+            else 
+            {
+                $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+            }
+        },
+        error: function()
+        {
+            $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+        }
+    });
+}
+
+</script>
+</body>
+</html>

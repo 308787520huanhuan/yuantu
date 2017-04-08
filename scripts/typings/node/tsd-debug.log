@@ -1,0 +1,27 @@
+[ERR!] cwd  : E:\platform\scripts\typings\node
+[ERR!] os   : Windows_NT 10.0.14295
+[ERR!] argv : "C:\\Program Files\\nodejs\\node.exe" "C:\\Users\\jerry\\AppData\\Roaming\\npm\\node_modules\\tsd\\build\\cli.js" "install" "node"
+[ERR!] node : v5.8.0
+[ERR!] tsd  : 0.6.5
+[ERR!] Error: getaddrinfo EAI_AGAIN api.github.com:443
+[ERR!] CODE : EAI_AGAIN
+[ERR!] getaddrinfo EAI_AGAIN api.github.com:443
+This is most likely not a problem with tsd itself
+and is related to network connectivity.
+In most cases you are behind a proxy or have bad network settings.
+
+If you are behind a proxy, please make sure that the
+'proxy' config is set properly.  See: https://github.com/DefinitelyTyped/tsd#tsdrc
+[ERR!] 
+Error: getaddrinfo EAI_AGAIN api.github.com:443
+    at Object.exports._errnoException (util.js:890:11)
+    at errnoException (dns.js:31:15)
+    at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:77:26)
+
+[ERR!] tsd.json could not be retrieved
+
+[ERR!] .tsdrc could not be retrieved
+
+[ERR!] Please include the following file with any support request:
+    E:\platform\scripts\typings\node\tsd-debug.log
+

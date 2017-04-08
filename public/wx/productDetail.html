@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <title>立即出发</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+    <!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <style>
+    .bottom_content{
+      padding-bottom: 40px;
+    }
+    .flaticon-restaurant{
+      font-style: normal;
+      display: block;
+      width: 50px;
+      height: 50px;
+      font-size: 25px;
+      margin: 5px auto 10px auto;
+      text-align: center;
+      line-height: 50px;
+      border: 2px solid #ccc;
+      border-radius: 50%;
+      color: #f59923;
+      border-color: #f59923;
+    }
+    .content{
+      padding: 10px 0;
+    }
+    .content > *{
+      padding: 0 10px;
+    }
+    .content p{
+      font-size: 13px;
+      line-height: 30px;
+      color: #666;
+    }
+    .content p .price{
+      font-size: 18px;
+    }
+    .content p.price_content{
+      line-height: 50px;
+      background: #f9f9f9;
+      margin: 5px 0;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+    }
+    .package_type p {
+        margin-bottom: 10px;
+        padding: 1px 15px;
+        position: relative;
+        border: 1px solid #eee;
+        font-size: 13px;
+        color: #666;
+        cursor: pointer;
+    }
+    .package_type p.active {
+        border: 1px solid #f59923;
+    }
+    .package_type p i {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        color: #f59923;
+        display: none;
+    }
+    .package_type p.active i {
+        display: block;
+    }
+    .pay-content{
+      position: fixed;
+      z-index: 1000;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      line-height: 40px;
+      color: #fff;
+      background: #fff;
+      border-top: 1px solid #eee;
+    }
+    .pay-content .total-content{
+      color: #f59923;
+      width: 30%;
+      text-align: center;
+      float: left;
+    }
+   .pay-content .payBtn{
+      background: #f59923;
+      width: 70%;
+      text-align: center;
+      float: left;
+    }
+
+    .tab_content{
+			border-bottom:2px solid #f7f7f7;
+			display: flex;
+		}
+		.tab_content .each_tab{
+			display: inline-block;
+			padding: 10px 0;
+			font-size: 14px;
+			color: #484c50;
+			cursor: pointer;
+			flex: 1;
+			text-align: center;
+		}
+		.tab_content .each_tab.active{
+			border-bottom: 2px solid #f59923;
+			color: #f59923;
+		}
+		.content_swap{
+			padding:10px;
+			line-height: 30px;
+      font-size: 12px;
+		}
+    .content_swap img{
+      width: 100%;
+    }
+    .mb10{
+      margin-bottom: 10px;
+    }
+    .noDate
+    {
+      text-align: center
+    }
+    #commentList .weui-media-box__hd{
+      width: 30px;
+      height: 30px;
+    }
+    #commentList .weui-media-box_appmsg{
+      padding:10px 0;
+      align-items:flex-start;
+    }
+    #commentList .weui-media-box__bd{
+      position: relative;
+    }
+    #commentList .weui-media-box__hd > img{
+      border-radius: 50%;
+    }
+    #commentList .weui-media-box__title{
+      font-size: 14px;
+    }
+    .upContent{
+      position: absolute;
+      right: 10px;
+      top: 0;
+      color: #f59923;
+    }
+    .commentContent{
+      line-height: 20px;
+    }
+    .disabledBtn{
+      background: #ccc !important;
+    }
+    #info *,#scheduling *,#purchaseNotice *,#costDescription *
+    {
+      font-size: 14px !important;
+    }
+    </style>
+</head>
+<body>
+  <!--banner-->
+  <!--<div class="swiper-container swiper-container-horizontal">
+      <img src="" width="100%" height="160" style="display: block" data-lable="icon">
+      
+  </div>-->
+  <div class="swiper-container swiper-container-horizontal">
+      <span class="main-color addToCollection" style="position: absolute;right: 10px;bottom: 5px;font-size: 14px;z-index: 2"><i class="fa fa-star-o fa-lg"></i>&nbsp;收藏</span>
+      <span class="main-color upActivity" style="position: absolute;right: 80px;bottom: 5px;font-size: 14px;z-index: 2"><i class="fa fa-thumbs-o-up fa-lg"></i>&nbsp; <span data-lable="up"></span></span>
+      <div class="swiper-container" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="" alt="" width="100%" height="160" style="display: block" data-lable="icon"></div>
+            <div class="swiper-slide"><img src="" alt="" width="100%" height="160" style="display: block" data-lable="icon1"></div>
+            <div class="swiper-slide"><img src="" alt="" width="100%" height="160" style="display: block" data-lable="icon2"></div>
+          </div>
+      </div>
+      <!-- If we need pagination -->
+      <!--<div class="swiper-pagination swiper-pagination-bullets">
+        <span class="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
+        <span class="swiper-pagination-bullet"></span>
+        <span class="swiper-pagination-bullet"></span>
+      </div>-->
+  </div>
+
+<!--banner end-->
+<div class="content">
+    <h3> <span data-lable='title'> </span>
+    <!--<span class="main-color" style="font-size: 12px;font-weight: normal">2-3人报名享98折优惠；4-5人享95折优惠；6-7人享85折优惠</span>-->
+    </h3>
+    <p class="price_content"><span class="main-color"><span data-lable='price' class="price">00.00</span></span> 元/人 <span class="pull-right">已售<span data-lable='solded'>0</span>人&nbsp;&nbsp;/&nbsp;&nbsp;剩余<span data-lable='still'>30</span>人</span></p>
+    <p><span data-lable='starttime' class="main-color">2-17-1-12</span> 至 <span data-lable='endtime' class="main-color">2017-1-20</span></p>
+    <p style="margin-top: 10px;"> <span style="font-weight: bold">请选择套餐类型</span>
+        <div class="package_type">
+        </div>
+    </p>
+</div>
+<div class="bottom_content">
+  <div class="tab_content">
+    <div class="each_tab active">
+      详情
+    </div>
+    <div class="each_tab">
+      行程
+    </div>
+    <div class="each_tab">
+      费用
+    </div>
+    <div class="each_tab">
+      须知
+    </div>
+    <div class="each_tab">
+      评论
+    </div>
+  </div>
+  <div class="content_swap">
+    <div class="each_content" data-lable="introduce" id="info">
+      
+    </div>
+    <div class="each_content hide" data-lable="schedule" id="scheduling">
+      
+    </div>
+    <div class="each_content hide" data-lable="fee" id="costDescription">
+    </div>
+    <div class="each_content hide" data-lable="must" id="purchaseNotice">
+    </div>
+    <div class="each_content hide" id='comment'>
+      <div class="noDate hide" id = "commentNoDate">
+        该活动暂无评论哦~~
+      </div>
+      <div id="commentList">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="pay-content">
+    <div class="total-content">合计：<span id="total-price"></span></div>
+    <div class="payBtn pay_now">立即购买</div>
+  </div>
+
+<!-- body 最后 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/js/swiper.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/fastclick.js"></script>
+<script src="../pc/js/tools.js"></script>
+<!---->
+<!--<script src="../config.js"></script>-->
+<script>
+  $(function() 
+  {
+    FastClick.attach(document.body);
+  });
+</script>
+<script type="text/javascript">
+    var $page = $("body");
+    var $commentList = $("#commentList");
+
+    //总共的价格
+		var $total_price = $("#total-price");
+
+		//套餐id
+		var package_name = "";
+
+    var packagePrcie = 0;
+
+    var status;
+		
+		//套餐
+		var $package_type = $(".package_type");
+		
+    //当前登录的用户Id
+    var userId,para,activityId;
+    var hre = window.location.href;
+  
+    if(hre.indexOf("&") != -1)
+    {
+        para = hre.split("?")[1].split("&");
+        userId = para[1].split("=")[1];
+        activityId = para[0].split("=")[1];
+
+        $.cookie("userId",userId);
+    }
+    else
+    {
+        userId = $.cookie("userId");
+        activityId = location.href.split("=")[1];
+    }
+    
+    //存活动的ID
+    $.cookie("activityId",activityId);
+
+
+		//浏览次数
+		// var num = parseInt($.cookie('num'));
+    var num = 30;
+
+		//剩余几张
+		var still = 0;
+
+    //获得活动详情
+    getActivityInfo();
+
+    function getActivityInfo()
+    {
+      $.showLoading()
+
+      //请求活动详情
+      $.ajax
+      ({
+        type:'get',
+        url:'/views/index/getActivityInfo',
+        data:{'id':activityId,'num':num + 1},
+        success: function(data)
+        {
+          var comment = data.comment;
+          var data = data.info;
+          $. hideLoading()
+          
+          status = data.status;
+          
+          //活动是否有折扣
+          $.cookie("discount",data.discount);
+
+          for ( var option in data) 
+          {
+            if($("[data-lable='" + option + "']").is('span,h3'))
+            {
+                $("[data-lable='" + option + "']").html(data[option]);
+            } 
+            else if($("[data-lable='" + option + "']").is('img'))
+            {
+              $("[data-lable='" + option + "']").prop('src',data[option]);
+            }
+            else if($("[data-lable='" + option + "']").is('div'))
+            {
+              $("[data-lable='" + option + "']").html(decodeURIComponent(data[option]));
+            }
+            
+            //浏览次数
+            if( option == 'count_of_view'){
+
+              //保存浏览次数
+              $.cookie('num',data[option]);
+            }
+            //构建套餐列表
+            if( option == 'package'){
+              
+              //循环遍历套餐内容
+              var lis = ''
+              $.each(data[option],function(){
+                lis += '<p data-detail="'+this.detail+'" data-price="'+this.price+'">'+this.detail+' <i class="fa fa-check"></i></p>'
+              })
+
+              $package_type.append(lis);
+            }
+
+            //默认选中第一个套餐
+            $package_type.find("p:first").trigger('click');
+
+            if(status == 0 || status == 2 || $("[data-lable='still']").text() == 0)
+            {
+              $(".payBtn").addClass("disabledBtn");
+            }
+
+            //banner切换
+            $(".swiper-container").swiper
+            ({
+              loop: true,
+              autoplay: 10000
+            });
+          
+          }
+
+          // 剩余几张
+          still = data.maxnum - data.solded;
+          $("[data-lable='still']").text(still);
+
+          //评价列表
+          if(comment.length == 0)
+          {
+            $("#commentNoDate").removeClass("hide");
+          }
+          else
+          {
+            $commentList.empty();
+
+            var lis = "";
+            $.each(comment,function()
+            {
+              lis +=  '<a class="weui-media-box weui-media-box_appmsg" data-id="'+this.id+'">'+
+                      '<div class="weui-media-box__hd">'+
+                      '<img class="weui-media-box__thumb" src="'+this.avatar+'" width="60" height="60">'+
+                      '</div>'+
+                      '<div class="weui-media-box__bd">'+
+                      '<div class="upContent">'+
+                      '<i class="fa fa-thumbs-o-up fa-lg upComment"></i>'+
+                      '<span class="upNume">'+this.up+'</span>'+
+                      '</div>'+
+                      '<h4 class="weui-media-box__title">'+this.nickname+'</h4>'+
+                      '<div class="commentContent">'+
+                      this.comtent+
+                      '</div>'+
+                      '<p class="weui-media-box__desc">'+this.add_time+'</p>'+
+                      '</div>'+
+                      '</a>'
+            })
+            $commentList.append(lis);
+            
+          }
+
+        }
+
+      })
+    }
+
+    //tab切换
+		$(".tab_content").on("click",".each_tab",function(){
+			var $this = $(this);
+			var index = $this.index();
+			var status = $this.data('status');
+			$this.addClass("active").siblings().removeClass("active");
+			$(".each_content").eq(index).removeClass("hide").siblings().addClass("hide");
+		})
+
+    //切换套餐的ID
+		$package_type.on('click','p',function()
+    {
+			var $this = $(this);
+			packagePrcie = $this.data('price');
+			package_name = $this.data('detail');
+			if(!$this.hasClass('active'))
+      {
+				$this.addClass('active').siblings('p').removeClass('active')
+				$total_price.text(parseInt(packagePrcie));
+			}
+		})
+
+    //收藏
+    $(".addToCollection").on("click",function()
+    {
+      if(userId && activityId)
+      {
+        var timestamp = Date.parse(new Date()); 
+
+        $.showLoading()
+
+        //生成游记
+        $.ajax
+        ({
+            url:'/views/index/addToCollection',
+            type: 'POST',
+            data: {"user_id":userId,"activity_id":activityId,"add_time":Tools.getDate(timestamp)},
+            success: function(data)
+            {
+                $. hideLoading()
+                
+                if(200 === data.code) 
+                {
+                    $.alert(data.info);
+                } else {
+                    $.alert("操作失败,请稍后重试");
+                }
+            },
+            error: function(){
+                $. hideLoading()
+                $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+            }
+        });
+      }
+    })
+
+    //点赞
+    $(".upActivity").on("click",function()
+    {
+      up(userId,activityId,1,$("[data-lable='up']"));
+    })
+
+    $commentList.on("click",".upComment",function(){
+      var $a = $(this).closest("a");
+      up(userId,$a.data("id"),2,$a.find(".upNume"));
+    })
+
+
+    //立即购买
+		$(".pay_now").on('click',function()
+    {
+      if(!$(this).hasClass("disabledBtn"))
+      {
+         //0（待定）1（进行中）2（已下线）
+        if (status == 0)
+        {
+          $.alert("很抱歉，活动暂未开始，不能购买","提示")
+        } 
+        else if (status == 2)
+        {
+          $.alert("很抱歉，活动已下线","提示")
+        }
+        else if ($("[data-lable='still']").text() == 0)
+        {
+          $.alert("很抱歉，活动名额已满","提示")
+        }
+        else{
+          // $.alert('<div class="left-part"><p class="mb10">扫描微信二维码支付</p><img src="../pc/images/old.png" alt="" class="mb10" width="100"></div><div class="right-part" style="width: 200px"><p class="mb10">支付宝账号转账支付</p><span>133 9819 6433</span> <br/><span>名称：远徒户外</span></div>',"支付方式")
+          // return;
+          $.cookie('activityPrice',packagePrcie);
+          $.cookie('packageName',package_name);
+          $.cookie("prePage","productDetail");
+          //跳转到添加用户界面
+          location.href = 'addUser.html';
+        }
+      }
+		})
+
+    //点赞功能 type:1(对活动的点赞) 2（对评论的点赞）
+    function up(userId,id,type,$obj)
+    {
+      var timestamp = Date.parse(new Date()); 
+      var parameter = {};
+      parameter.user_id = userId;
+      parameter.add_time = Tools.getDate(timestamp);
+      parameter.type = type;
+      parameter.obj_id = id;
+      
+      $.showLoading()
+      console.info($obj.html());
+
+      //生成游记
+      $.ajax
+      ({
+          url:'/views/index/up',
+          type: 'POST',
+          data: parameter,
+          success: function(data)
+          {
+              $. hideLoading()
+              
+              if(201 === data.code) 
+              {
+                  $.alert(data.info);
+              }
+              else if(200 === data.code) 
+              {
+                  $.alert(data.info,function()
+                  {
+                    $obj.text(parseInt($obj.text()) + 1)
+                  });
+              }
+              else {
+                  $.alert("操作失败,请稍后重试");
+              }
+          },
+          error: function(){
+              $. hideLoading()
+              $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+          }
+      });
+    }
+
+</script>
+</body>
+</html>

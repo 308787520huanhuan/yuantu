@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <title>订单确认</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+    <!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/font-awesome.css">
+
+    <style>
+    /***购买商品的界面***/
+    #purchasePage
+    {
+      padding-bottom: 40px;
+      color: #373737;
+    }
+    #purchasePage .mainContanier 
+    {
+        padding-bottom: 50px;
+    }
+    #purchasePage .product-content{
+      padding: 0 15px;
+    }
+
+    #purchasePage .pay-content{
+      position: fixed;
+      z-index: 9;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 50px;
+      line-height: 50px;
+      color: #fff;
+    }
+    #purchasePage .pay-content .total-content{
+      background: #f59923;
+      width: 60%;
+      text-align: center;
+      float: left;
+    }
+    #purchasePage .pay-content .payBtn{
+      background: red;
+      width: 40%;
+      text-align: center;
+      float: left;
+    }
+    .counponBtn{
+      text-align: right;
+      padding: 10px;
+      position: absolute;
+      right:10px;
+      z-index: 8;
+    }
+    .counponBtn a{
+      color: red;
+    }
+    .selectNum{
+      margin-top: 8px;
+    }
+    .selectNum .num{
+      width: 20px;
+      text-align: center;
+      border: none;
+      margin: 0 15px;
+    }
+    .selectNum .oper{
+      width: 30px;
+      height: 30px;
+      line-height: 25px;
+      text-align: center;
+      border: 1px solid #f59923;
+    }
+      .weui-cells:before {
+          border-top: none;
+      }
+      .weui-media-box__title{
+        font-size: 14px;
+        color: #373737;
+      }
+      /**商品推荐**/
+      .recommendTitlte{
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        font-size: 14px;
+        border-top: 1px solid #F7F7F7;
+      }
+      .product-content .title{
+        font-size: 14px;
+        padding: 10px 0;
+      }
+      .rulesContent{
+        padding: 50px 10px 0 10px;
+        font-size: 13px;
+        text-indent: 20px;
+        line-height: 25px;
+      }
+      .rulesContent .title{
+        font-size: 14px;
+      }
+      .rulesContent .date{
+        font-size: 12px;
+      }
+      .rulesContent .money{
+        color: #f59923;
+        margin-left: 5px;
+      }
+      .hide{
+        display: none;
+      }
+      .checkboxList{
+        display: flex;
+        height: 30px;
+        line-height: 27px;
+        padding-left: 10px;
+      }
+      .checkboxList .weui-cells
+      {
+        margin-top: 0;
+      }
+      .checkboxList .weui-cell
+      {
+        padding: 0;
+      }
+      .weui-cells_checkbox .weui-icon-checked:before{
+        font-size: 16px;
+      }
+      .checkboxList a
+      {
+        color: #2a7ae2;
+        text-decoration: underline;
+        font-size: 12px;
+      }
+      .checkboxList .weui-cells:after
+      {
+        border-bottom: none
+      }
+    </style>
+</head>
+<body id="purchasePage">
+  <div class="pay-content">
+    <div class="total-content">合计：<span id="total-price">0.00</span></div>
+    <div class="payBtn">提交订单</div>
+  </div>
+  <div class="mainContanier">
+    <!--用户列表-->
+    <div class="counponBtn hide" id="counponBtn">
+      <a class='rulesBtn open-popup' data-target="#counponContent">优惠券</a>
+    </div>
+    <div class="userList">
+    </div>
+    <div class="checkboxList weui-form-preview__item" style="border-bottom:1px solid #eee">
+      <div class="weui-cells weui-cells_checkbox">
+          <label class="weui-cell weui-check__label" for="s12" style="padding-left: 0;padding-right: 0">
+              <div class="weui-cell__hd">
+                <input type="checkbox" name="checkbox1" class="weui-check" id="s12">
+                <i class="weui-icon-checked"></i>
+              </div>
+          </label>
+      </div>
+      <span style="font-size: 13px;">我已阅读并接受</span><a class="aLink open-popup" data-target="#insuranceDeclaration">保险申明</a>
+    </div>
+    <div class="checkboxList">
+      <div class="weui-cells weui-cells_checkbox">
+          <label class="weui-cell weui-check__label" for="s13" style="padding-left: 0;padding-right: 0">
+              <div class="weui-cell__hd">
+                <input type="checkbox" name="checkbox1" class="weui-check" id="s13">
+                <i class="weui-icon-checked"></i>
+              </div>
+          </label>
+      </div>
+      <span style="font-size: 13px;">我已阅读并接受</span><a class="aLink open-popup" data-target="#disclaimer">免责申明</a>
+    </div>
+    <p class="recommendTitlte">
+      <span class="main-color">/*</span>为
+      <span class="main-color">*</span>你
+      <span class="main-color">*</span>推
+      <span class="main-color">*</span>
+      荐<span class="main-color">*/</span>
+    </p>
+    <!--用户列表 over-->
+    <div class="goodsContent">
+      
+    </div>
+    
+  </div>
+  
+  <div id="counponContent" class="weui-popup__container hasHeaderTop">
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal" style="background: #fff">
+      <div class="headerTop">
+        <div class="rightPart">
+            <i class="fa fa-times close-popup"></i>
+          </div>
+          <div class="title">
+              点击选择优惠券
+          </div>
+          <div class="rightPart" id="editSave">
+            完成
+          </div>
+      </div>
+      <div class="rulesContent">
+          <div class="weui-cells weui-cells_radio" id="counponList">
+            
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!--保险申明-->
+<div id="insuranceDeclaration" class="weui-popup__container hasHeaderTop">
+  <div class="weui-popup__overlay"></div>
+  <div class="weui-popup__modal" style="background: #fff;">
+    <div class="headerTop">
+        <div class="leftPart" id="editSave">
+          <i class="fa fa-times close-popup"></i>
+        </div>
+        <div class="title">
+            保险申明
+        </div>
+    </div>
+    <div class="rulesContent">
+        <p>购买的保险信息，以本次活动合作保险公司提供为准。购买成功后，保险公司将会发送短信告知。谢谢</p>
+    </div>
+  </div>
+</div>
+<!--免责申明-->
+<div id="disclaimer" class="weui-popup__container hasHeaderTop">
+  <div class="weui-popup__overlay"></div>
+  <div class="weui-popup__modal" style="background: #fff;">
+    <div class="headerTop">
+        <div class="leftPart" id="editSave">
+          <i class="fa fa-times close-popup"></i>
+        </div>
+        <div class="title">
+            免责申明
+        </div>
+    </div>
+    <div class="rulesContent">
+        <p>本次活动属于户外自助徒步活动，当由于意外事故、气候变化和急性疾病等不可预测因素造成身体损害时，活动的发起者和同行者有义务尽力救助，但如果造成了不可逆转的损害，活动的其他成员不负担任何责任。活动的任何一名队员都应本着：“尽力救助，风险自担”的原则参加本次活动，活动发起者亦不承担任何法律和经济责任。</p>
+        <p>凡报名参加者均视为具有完全民事行为能力的人，如在活动中发生人身损害后果，活动的发起者和同行者不承担赔偿责任，由被损害人依据法律规定和本声明依法解决，凡报名者均视为接受本声明。</p>
+        <p>参加活动前，必须事先与自己的家属沟通，取得家属的理解和支持，同时知道并同意该免责声明。否则后果有参加者自负。</p>
+    </div>
+  </div>
+</div>
+<!-- body 最后 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="../../pc/js/tools.js"></script>
+<script src="js/fastclick.js"></script>
+
+<script>
+  $(function() 
+  {
+    FastClick.attach(document.body);
+
+    var $tab1 = $("#tab1");
+    var $purchasePage = $("#purchasePage");
+    var $total_price = $("#total-price");
+
+    //选择的用户列表
+    var userIdArr = $.cookie('userIdArr').split(',');
+    var userNum = userIdArr.length;
+    var client = [];
+    
+    //当前活动的Id
+    var activityId = $.cookie('activityId');
+    var userId = $.cookie('userId');
+    var packageName = $.cookie('packageName');
+    var activityPrice = $.cookie('activityPrice');
+    
+    //选择的套餐信息
+    var packageInfo = {};
+    packageInfo.name = packageName;
+    packageInfo.price = activityPrice;
+
+
+    var discount = $.cookie('discount');
+
+    //优惠券信息
+    var counponInfo = {};
+
+    //订单总价
+    var userTotalPrice = activityPrice * userNum;
+
+    //2-3人 98折 4-5人:95折 6-7人：85折
+    if(discount == 1)
+    {
+      if( userNum >= 2 && userNum <=3)
+      {
+        userTotalPrice *= 0.98
+
+      } else if(userNum >= 4 && userNum <=5)
+      {
+        userTotalPrice *= 0.95
+
+      } else if(userNum >=6 )
+      {
+        userTotalPrice *= 0.85
+      }
+    }
+    
+    //合计价格
+    $total_price.text(userTotalPrice);
+
+
+    //获得所选择的用户的信息列表
+    getUserClientInfo(userIdArr);
+
+    getGoodsList();
+
+    getCounponList();
+
+
+    //点击加减的时候
+    $purchasePage.on('click','.selectNum span',function()
+    {
+      var $this = $(this);
+      var $eachGoodContent = $this.closest(".eachGoodContent");
+      var $input = $this.siblings('input');
+      var num = parseInt($input.val());
+
+      //单价
+      var price = parseInt($this.closest(".chooseGoodsNum").data('price'));
+
+      //减
+      if($this.hasClass('del') && num != 0)
+      {
+        --num;
+        userTotalPrice -= price;
+      }
+      //加
+      else if($this.hasClass('add'))
+      {
+        ++num;
+        userTotalPrice += price;
+      }
+      //input赋值
+      $input.val(num);
+      //记录选了几个
+      $eachGoodContent.data('num',num);
+      //总价显示
+      $total_price.text(userTotalPrice);
+
+    })
+
+    //点击提交订单
+    $(".payBtn").on('click',function()
+    {
+      if(!$("#s12").prop("checked"))
+      {
+        $.alert("请仔细阅读保险申明并勾选");
+        return;
+      } 
+      else if(!$("#s13").prop("checked"))
+      {
+        $.alert("请仔细阅读免责申明并勾选");
+        return;
+      }
+      
+      //商品列表
+      var $goodsLIst = $(".eachGoodContent");
+      
+      //当前时间戳
+      var timestamp = Date.parse(new Date()); 
+
+      //构建参数
+      var parameter = {};
+
+      //商品信息 对象数组
+      //{id:'',num:''}
+      var goods = [];
+      $goodsLIst.each(function()
+      {
+        var $this = $(this);
+        var obj = {};
+        var num = $this.data('num');
+        if(num != 0)
+        {
+          obj.num = num;
+          obj.title = $this.data('title');
+          obj.icon = $this.data('icon');
+          obj.price = $this.data('price');
+          goods.push(obj);
+        }
+      })
+
+      //选择的用户
+      //user_client 表的id 数组
+      parameter.clientInfo = encodeURIComponent(JSON.stringify(client));
+      parameter.goodsInfo = encodeURIComponent(JSON.stringify(goods));
+      
+      //状态 新增的订单应该是1：待付款
+      parameter.status = 1;
+      parameter.counponId = counponInfo.id;
+      parameter.counponInfo = encodeURIComponent(JSON.stringify(counponInfo));
+      
+      //总价
+      parameter.price = userTotalPrice;
+      
+      //订单生成时间
+      parameter.add_time = Tools.getDateTime(timestamp);
+      
+      //活动套餐ID
+      parameter.packageInfo = encodeURIComponent(JSON.stringify(packageInfo));
+      parameter.activity_id = activityId;
+      parameter.user_id = userId;
+      
+      //提交订单请求
+      $.ajax
+      ({
+        type:'get',
+        url:'/views/index/addOrder',
+        data:parameter,
+        success: function(data)
+        {
+          if(data.code==200) 
+          { 
+            $.alert("提交订单成功,订单超过1小时未付款，将自动取消，谢谢！",function()
+            {
+                location.href = "information.html?orderId=" + data.orderId + "&amount=" + userTotalPrice; 
+            })                                 
+
+          }
+          
+        }
+      })
+      
+
+    })
+
+    //选择优惠券 点击完成
+    $("#editSave").on("click",function()
+    {
+      //选择的优惠券
+      var chec = $("#counponList").find("input[type='radio']:checked");
+      counponInfo.id = chec.prop('id');
+      counponInfo.price = chec.data('money');
+      counponInfo.title = chec.data('title');
+
+      //总价减优惠券金额
+      userTotalPrice -= chec.data('money');
+      $total_price.text(userTotalPrice);
+
+      //关闭pop
+      $(".close-popup").trigger("click");
+    })
+
+    //获得商品列表
+    function getGoodsList(){
+      $.ajax({
+          type:'get',
+          url:'/views/index/getGoodsList',
+          success: function(data){
+            var $raiderList = $(".goodsContent");
+            var list = "";
+            if(data.length > 0){
+              $raiderList.empty();
+
+              $.each(data,function(){
+                var value = this;
+                list += '<div class="eachGoodContent" data-title="'+value.title+'" data-num="0" data-price="'+value.price+'" data-icon="'+value.icon1+'">'+
+                        '<div class="product-content">'+
+                        '<p class="title">'+value.name+'</p>'+
+                        '<div class="img-content">'+
+                        '<img src="'+value.icon1+'" alt="" class="product-img" width="80">'+
+                        '<img src="'+value.icon2+'" alt="" class="product-img" width="80" style="margin:0 10px">'+
+                        '<img src="'+value.icon3+'" alt="" class="product-img" width="80">'+
+                        '</div>'+
+                        '</div>'+
+                        '<div class="weui-form-preview__hd">'+
+                        '<div class="weui-form-preview__item chooseGoodsNum" data-price="'+value.price+'">'+
+                        '<label class="weui-form-preview__label main-color">¥'+value.price+'</label>'+
+                        '<div class="selectNum pull-right weui-flex">'+
+                        '<span class="del weui-flex__item oper">-</span>'+
+                        '<input type="text" name="" value="0" class="num weui-flex__item">'+
+                        '<span class="add weui-flex__item oper">+</span>'+
+                        '</div>'+
+                        '</div>'+
+                        '</div>'+
+                        '</div>'
+              })
+              $raiderList.append(list);
+            }
+          }
+        })
+    }
+
+    //获得优惠券列表
+    function getCounponList()
+    {
+      $.ajax
+      ({
+          type:'get',
+          url:'/views/index/getCounponList',
+          data:{'userId':userId},
+          success: function(data)
+          {
+            var $counponList = $("#counponList");
+            if(data.length > 0)
+            {
+              var list = "";
+              $.each(data,function()
+              {
+                var d1 = new Date(this.addTime);
+                var endDate = Tools.DateAdd( "m ",6,d1); 
+                var now   =   new   Date();
+                //没有过期且没用
+                if(endDate - now > 0 && this.counponStatus == 1)
+                {
+                  if($("#counponBtn").hasClass('hide'))
+                  {
+                    $("#counponBtn").removeClass('hide')
+                  }
+                  var title = this.type == 1 ? "新人首次下单优惠券" : '我的游记奖励券'
+                  list += '<label class="weui-cell weui-check__label" for="'+this.id+'">'+
+                          // '<div class="weui-cell__hd money">￥'+this.money+'</div>'+
+                          '<div class="weui-cell__bd">'+
+                          '<p class="title">'+title+'<span class="money">￥'+this.money+'</span></p>'+
+                          '<p class="date">有效期至：'+endDate.toLocaleDateString()+'</p>'+
+                          '</div>'+
+                          '<div class="weui-cell__ft">'+
+                          '<input type="radio" class="weui-check" name="radio1" id="'+this.id+'" data-money="'+this.money+'" data-title="'+this.money+'">'+
+                          '<span class="weui-icon-checked"></span>'+
+                          '</div>'+
+                          '</label>'
+                }
+              })
+              $counponList.append(list)
+            }
+          }
+      })
+    }
+    
+    function getUserClientInfo(userIdArr)
+    {
+      $.ajax
+      ({
+        type:'get',
+        url:'/views/index/getUserClientInfo',
+        data:{'userIdArr':userIdArr},
+        success: function(data)
+        {
+          var $raiderList = $(".userList");
+          var list = "";
+          if(data.length > 0)
+          {
+            //所选联系人存起来
+
+            $raiderList.empty();
+
+            client = data;
+            $.each(data,function()
+            {
+              var value = this;
+              var sex = value.sex == 0 ? '男':'女';
+              list += '<a href="#" class="weui-media-box weui-media-box_appmsg">'+
+                      '<div class="weui-media-box__bd">'+
+                      '<h4 class="weui-media-box__title">' + value.name + '&nbsp;&nbsp;' + value.phone +'&nbsp;&nbsp;'+ sex +'</h4>'+
+                      '<p class="weui-media-box__desc">' + value.id_card + ' 紧急电话：'+ value.merge_phone +'</p></div></a>'
+              //client.push(this);
+            })
+
+            $raiderList.append(list);
+          }
+        }
+
+      })
+    }
+    //返回按钮
+    $(".headerTop").on('click','.fa-angle-left',function(){
+        history.back();
+    })
+  });
+</script>
+</body>
+</html>

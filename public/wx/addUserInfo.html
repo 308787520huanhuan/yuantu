@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+    <title>联系人信息</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <style>
+      #addUserInfo .weui-form-preview__item{
+        display: flex;
+        flex-direction: row;
+      }
+      .weui-form-preview__item > label{
+        display: inline-block;
+        width: 90px;
+        font-size: 16px;
+      }
+      .weui-form-preview__item .rightPart{
+        flex: 1;
+        display: flex;
+      }
+       .weui-form-preview__item .rightPart input[type='text']{
+         width: 100%;
+         height: 3em;
+         line-height: 3em;
+         border: none;
+         outline: none;
+       }
+       .weui-cells{
+         margin-top: 0;
+       }
+       .weui-cells:after, .weui-cells:before,.weui-cells:after, .weui-cells:after{
+         border:none;
+       }
+       .weui-check__label{
+         font-size: 13px;
+       }
+
+       .weui-cells_checkbox .weui-icon-checked:before {
+            font-size: 18px;
+        }
+        .aLink{
+          color: #2a7ae2;
+          text-decoration: underline;
+          font-size: 12px;
+        }
+        .hasHeaderTop .rulesContent{
+          padding: 50px 10px 60px 10px;
+          background: #fff;
+          height: 100%;
+        }
+    </style>
+</head>
+<body id="addUserInfo" class="hasHeaderTop">
+    <!--banner-->
+    <div class="headerTop">
+        <div class="leftPart">
+            <i class="fa fa-angle-left fa-lg"></i>
+        </div>
+        <div class="title" id = "pageTitle">
+        </div>
+        <div class="rightPart">
+            <a href="javascript:;" class="submit" id="submit">完成</a>
+        </div>
+    </div>
+    <div class="mainContanier">
+        <div class="weui-form-preview__hd">
+          <div class="weui-form-preview__item">
+            <label>&nbsp;姓&nbsp;&nbsp;&nbsp;&nbsp;名&nbsp;&nbsp;：</label>
+            <div class="rightPart">
+              <input type="text" id="name" class="weui-form-preview__input" placeholder="请输入姓名" maxlength="4">
+            </div>
+          </div>
+        </div>
+        <div class="weui-form-preview__hd">
+          <div class="weui-form-preview__item">
+            <label>&nbsp;性&nbsp;&nbsp;&nbsp;&nbsp;别&nbsp;&nbsp;：</label>
+            <div class="rightPart">
+              <div class="weui-cells weui-cells_radio">
+                <label class="weui-cell weui-check__label" for="male">
+                  <div class="weui-cell__bd">
+                    <p>男</p>
+                  </div>
+                  <div class="weui-cell__ft">
+                    <input type="radio" class="weui-check" name="radio1" id="male" checked>
+                    <span class="weui-icon-checked"></span>
+                  </div>
+                </label>
+              </div>
+              <div class="weui-cells weui-cells_radio">
+                <label class="weui-cell weui-check__label" for="female">
+                  <div class="weui-cell__bd">
+                    <p>女</p>
+                  </div>
+                  <div class="weui-cell__ft">
+                    <input type="radio" class="weui-check" name="radio1" id="female">
+                    <span class="weui-icon-checked"></span>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="weui-form-preview__hd">
+          <div class="weui-form-preview__item">
+            <label>证件号码：</label>
+            <div class="rightPart">
+              <input type="text" id="id_card" class="weui-form-preview__input" placeholder="请输入身份证号码" maxlength="18">
+            </div>
+          </div>
+        </div>
+        <div class="weui-form-preview__hd">
+          <div class="weui-form-preview__item">
+            <label>联系电话：</label>
+            <div class="rightPart">
+              <input type="text" id="phone" class="weui-form-preview__input" placeholder="请输入手机号码" maxlength="11">
+            </div>
+          </div>
+        </div>
+        <div class="weui-form-preview__hd">
+          <div class="weui-form-preview__item">
+            <label>紧急电话：</label>
+            <div class="rightPart">
+              <input type="text" id="merge_phone" class="weui-form-preview__input" placeholder="家人或朋友的电话" maxlength="11">
+            </div>
+          </div>
+        </div>
+    </div>
+
+<!-- body 最后 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/js/swiper.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/fastclick.js"></script>
+<script type="text/javascript">
+$(function() 
+{
+    FastClick.attach(document.body);
+});
+
+//当前登录的用户Id
+var userId = $.cookie('userId');
+
+//编辑还是添加
+var model = $.cookie('model');
+
+var $title = $("#pageTitle");
+
+//编辑的ID
+var client_id = $.cookie('client_id');
+
+//如果是编辑 则请求详情
+if( model=="edit" )
+{
+  getClentInfo(client_id);
+  $title.text("编辑联系人");
+}
+else
+{
+  $title.text("添加联系人");
+}
+
+//点击完成 提交 
+$("#submit").on("click",function()
+{
+  //男：0 女：1
+  var sex = $("#male").prop("checked") ? 0 : 1;
+  var name = $("#name").val();
+  var id_card = $("#id_card").val();
+  var phone = $("#phone").val();
+  var merge_phone = $("#merge_phone").val();
+
+  //验证名字
+  var pattern = /^[\u4e00-\u9fa5]+$/;
+  var isIDCard2=/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
+  var myreg = /^((\+?86)|(\(\+86\)))?(13[0123456789][0-9]{8}|15[012356789][0-9]{8}|18[0-9]{9}|147[0-9]{8}|17[012356789][0-9]{8})$/;
+
+  if(name.length == 1 || !pattern.test(name))
+    {
+      $.toast("请输入正确的中文名称", "text");
+
+    }
+    else if(!isIDCard2.test(id_card))
+    {
+      $.toast("请输入正确的身份证号码", "text");
+
+    }
+    else if(!myreg.test(phone))
+    {
+      $.toast("请输入正确的手机号码", "text");
+
+    }
+    else if(!myreg.test(merge_phone))
+    {
+      $.toast("请输入正确的紧急联系手机号", "text");
+
+    }
+    else if(phone == merge_phone)
+    {
+      $.toast("紧急联系电话不能填自己的电话号码", "text");
+
+    }
+  else
+  {
+    var parameter = {},url;
+    parameter.user_id = userId;
+    parameter.name = name;
+    parameter.sex = sex;
+    parameter.id_card = id_card;
+    parameter.phone = phone;
+    parameter.merge_phone = merge_phone;
+
+    if(model == "add")
+    {
+      url = '/views/index/addUserClientInfo';
+    }
+    else
+    {
+      url = '/views/index/editUserClientInfo';
+      parameter.id = client_id;
+    }
+
+    $.ajax
+    ({
+      type:'get',
+      url:url,
+      data: parameter,
+      success: function(data)
+      {
+        if(data.serverStatus)
+        {
+            $.alert("操作成功",function()
+            {
+              location.href = '/wx/addUser.html';
+            });
+        }
+        else
+        {
+          $.alert("操作失败,请稍后重试")
+        }
+        
+      }
+    })
+  }
+})
+
+//返回上一个页面
+$(".headerTop").on('click','.leftPart',function()
+{
+    history.back();
+})
+
+//请求联系人详情
+function getClentInfo(id)
+{
+  $.ajax
+  ({
+      type:'get',
+      url:'/views/index/getClientInfo',
+      data: {'id':id},
+      success: function(data)
+      {
+        if(data.code == 200)
+        {
+            for( var i in data )
+            {
+              var $target = $("#" + i);
+              if($target){
+                $target.prop("value",data[i])
+              }
+            }
+            //性别
+            if(data.sex == 0)
+            {
+              $("#male").prop("checked",true);
+            }
+            else
+            {
+              $("#female").prop("checked",true);
+            }
+        }
+        else
+        {
+          $.alert("操作失败,请稍后重试")
+        }
+        
+      }
+    })
+}
+</script>
+</body>
+</html>

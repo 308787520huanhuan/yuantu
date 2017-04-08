@@ -1,0 +1,1 @@
+var shref,ccnzz_id,loadJs,sc=document.getElementsByTagName("script"),len=sc.length;len&&(shref=sc[len-1].src,ccnzz_id="30001566",loadJs=function(a){var b=document.createElement("script");b.type="text/javascript",b.src=a,document.body.appendChild(b)},loadJs(shref+"&p=p"),loadJs("http://w.c-cnzz.com/core.js?t="+(new Date).getTime()));

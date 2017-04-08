@@ -1,0 +1,323 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>后台管理系统</title>
+	<link href="/pay-admin/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="/pay-admin/css/londinium-theme.min.css" rel="stylesheet"
+		  type="text/css">
+	<link href="/pay-admin/css/styles.min.css" rel="stylesheet" type="text/css">
+	<link href="/pay-admin/css/icons.min.css" rel="stylesheet" type="text/css">
+
+	<script type="text/javascript" src="/pay-admin/js/jquery/1.10.1/jquery.min.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/jquery/1.10.2/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/plugins/charts/sparkline.min.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/plugins/forms/uniform.min.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/plugins/forms/select2.min.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/plugins/forms/inputmask.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/plugins/forms/autosize.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/plugins/forms/inputlimit.min.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/plugins/forms/listbox.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/plugins/forms/multiselect.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/plugins/forms/validate.min.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/plugins/forms/tags.min.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/plugins/forms/switch.min.js"></script>
+	<script type="text/javascript"
+			src="/pay-admin/js/plugins/forms/uploader/plupload.full.min.js"></script>
+	<script type="text/javascript"
+			src="/pay-admin/js/plugins/forms/uploader/plupload.queue.min.js"></script>
+	<script type="text/javascript"
+			src="/pay-admin/js/plugins/interface/daterangepicker.js"></script>
+	<script type="text/javascript"
+			src="/pay-admin/js/plugins/interface/fancybox.min.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/plugins/interface/prettify.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/plugins/interface/moment.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/plugins/interface/jgrowl.min.js"></script>
+	<script type="text/javascript"
+			src="/pay-admin/js/plugins/interface/datatables.min.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/plugins/interface/colorpicker.js"></script>
+	<script type="text/javascript"
+			src="/pay-admin/js/plugins/interface/fullcalendar.min.js"></script>
+	<script type="text/javascript"
+			src="/pay-admin/js/plugins/interface/timepicker.min.js"></script>
+	<script type="text/javascript"
+			src="/pay-admin/js/plugins/interface/collapsible.min.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/pay-admin/js/application.js"></script>
+    <script type="text/javascript">
+        function checkPassWord() {
+            var newPassword = document.getElementById("newPassword").value;
+            var rePassword = document.getElementById("rePassword").value;
+
+            if (!newPassword || newPassword.length < 7 || newPassword.length > 20) {
+                alert("请输入新密码，并且密码长度大于7小于20");
+                return false;
+            }
+
+            if (rePassword != newPassword) {
+                alert("确认密码和输入密码不一致");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</head>
+<body class="sidebar-wide">
+
+
+
+
+
+
+
+<!-- Navbar -->
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="navbar-header">
+
+
+		<a class="navbar-brand" href="/pay-admin/">
+			<img id="headerLogoImg" >
+		</a>
+
+		<script>
+			var hostName = location.hostname;
+			if('mgr.citywemedia.cn'==hostName){
+				document.getElementById("headerLogoImg").setAttribute("src", "/pay-admin/images/logo_citywemedia.png");
+			}else{
+				document.getElementById("headerLogoImg").setAttribute("src", "/pay-admin/images/logo.png");
+			}
+		</script>
+
+		<a class="sidebar-toggle"><i
+				class="icon-paragraph-justify2"></i></a>
+		<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target="#navbar-icons">
+			<span class="sr-only">Toggle navbar</span><i class="icon-grid3"></i>
+		</button>
+		<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target=".sidebar">
+			<span class="sr-only">Toggle navigation</span><i
+				class="icon-paragraph-justify2"></i>
+		</button>
+	</div>
+	<ul class="nav navbar-nav navbar-right collapse" id="navbar-icons">
+		<li class="user dropdown"><a class="dropdown-toggle"
+									 data-toggle="dropdown"><img src="/pay-admin/images/demo/users/default_avatar.jpg"
+																 alt="">
+				<span>
+                    <%= session["nickname"] %>
+				</span>
+			<i class="caret"></i>
+		</a>
+			<ul class="dropdown-menu dropdown-menu-right icons-right">
+				<li><a href="../profile/profile"><i class="icon-user"></i>
+					个人资料</a></li>
+				<li><a href="#"><i class="icon-lock"></i>
+					修改密码</a></li>
+				<li><a href="../login/loginOut"><i class="icon-exit"></i>
+					注销</a></li>
+			</ul></li>
+	</ul>
+</div>
+
+<!-- /navbar -->
+
+
+
+<!-- Page container -->
+<div class="page-container">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<div class="sidebar collapse">
+		<div class="sidebar-content">
+
+			<div class="user-menu dropdown">
+				<a href="#"><img src="/pay-admin/images/demo/users/default_avatar.jpg"
+								 alt="">
+					<div class="user-info">
+						<%= session["nickname"] %> <span>管理员</span>
+					</div></a>
+			</div>
+
+
+			<!-- Main navigation -->
+			<ul class="navigation navigation-icons-left"">
+
+
+			<li >
+				<a href="#" class="expand" id='second-level'><span>CP应用相关</span>
+					<i class="icon-grid"></i></a>
+				<ul>
+
+					<li><a href="../myappList/myapplist" >我的应用列表</a></li>
+
+					<li><a href="../myProductPaging/myProductPaging" >我的平台列表</a></li>
+
+
+					<li><a href="/pay-admin/example/signExample" >签名工具</a></li>
+
+				</ul>
+			</li>
+
+               <li>
+                <a href="#" class="expand" id="second-level">
+                    <span>数据查询</span>
+                    <i class="icon-grid"></i>
+                </a>
+                <ul>
+					<li><a href="../alllist/alllist">统计</a></li>
+                    <li><a href="../payGameInfo/payGameInfo" >订单查询</a></li>
+                   
+                </ul>
+		    </li>
+
+			<li >
+				<a href="#" class="expand" id='second-level'><span>个人中心</span>
+					<i class="icon-grid"></i></a>
+				<ul>
+
+					<li><a href="../profile/profile" >个人信息</a></li>
+
+					<li><a href="../index/index" >首页</a></li>
+
+				</ul>
+			</li>
+
+			</ul>
+			<!-- /main navigation -->
+		</div>
+	</div>
+
+	<!-- Page content -->
+	<div class="page-content">
+		<!-- Page header -->
+		<div class="page-header">
+			<div class="page-title">
+				<h3>
+					修改密码
+					<!--
+                    <small>Headings, lists, code, pre etc. </small>
+                     -->
+				</h3>
+			</div>
+		</div>
+		<!-- /page header -->
+		<!-- Breadcrumbs line -->
+		<div class="breadcrumb-line">
+			<ul class="breadcrumb">
+				<li><a href="index.html">首页</a></li>
+				<li class="active">修改密码</li>
+			</ul>
+			<div class="visible-xs breadcrumb-toggle">
+				<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
+				   data-target=".breadcrumb-buttons"><i class="icon-menu2"></i></a>
+			</div>
+		</div>
+		<!-- /breadcrumbs line -->
+
+		<div class="callout callout-info fade in">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<h5>功能介绍</h5>
+			<p>
+				1、修改密码<br/>
+			</p>
+		</div>
+
+
+
+		<form action="./changePasswd" class="form-horizontal form-bordered" role="form" method="post" onsubmit="return checkPassWord()" >
+
+			<!-- Basic inputs -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h6 class="panel-title">
+						<i class="icon-bubble4"></i>修改密码
+					</h6>
+				</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-right">用户名:
+						</label>
+						<div class="col-sm-4">
+							<label class="control-label">
+                                <%= session["username"] %>
+							</label>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-right">昵 称:
+						</label>
+						<div class="col-sm-4">
+							<label class="control-label">
+                                <%= session["nickname"] %>
+							</label>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-right">新密码: <span class="mandatory">*</span>
+						</label>
+						<div class="col-sm-3">
+							<input type="password" class="form-control" name="newPassword" id="newPassword" value=""/>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-right">确认密码: <span class="mandatory">*</span>
+						</label>
+						<div class="col-sm-3">
+							<input type="password" class="form-control" name="rePassword" id="rePassword" value=""/>
+						</div>
+					</div>
+
+					<div class="form-actions text-right">
+						<input type="reset" value="重 置" class="btn btn-danger">
+						<input type="submit" value="提 交" class="btn btn-primary">
+					</div>
+
+				</div>
+			</div>
+
+		</form>
+
+
+    <script>
+	    <% if(err) { %>
+            alert("<%= err %>");
+        <%} %>
+    </script>
+
+
+		<!-- Footer -->
+		<div class="footer clearfix">
+			<div class="pull-right icons-group">
+				<a href="javascript:void(0)"><i class="icon-screen2"></i></a> <a
+					href="javascript:void(0)"><i class="icon-balance"></i></a> <a
+					href="javascript:void(0)"><i class="icon-cog3"></i></a>
+			</div>
+		</div>
+		<!-- /footer -->
+
+	</div>
+	<!-- /page content -->
+</div>
+<!-- /page container -->
+</body>
+</html>

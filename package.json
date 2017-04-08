@@ -1,0 +1,27 @@
+{
+  "name": "express-app1",
+  "version": "0.0.0",
+  "description": "ExpressApp1",
+  "main": "platform.js",
+  "author": {
+    "name": "jerry"
+  },
+  "dependencies": {
+    "bytes": "^2.3.0",
+    "chart": "^0.1.2",
+    "datejs": "^1.0.0-rc3",
+    "del": "^2.2.2",
+    "ejs": "^2.4.1",
+    "express": "3.4.4",
+    "mysql": "^2.10.2",
+    "node-schedule": "^1.1.0",
+    "node-uuid": "^1.4.7",
+    "node-xlsx": "^0.7.1",
+    "qs": "^6.1.0",
+    "raw-body": "^2.1.6",
+    "request": "^2.72.0",
+    "stylus": "*",
+    "underscore": "^1.8.3",
+    "urlencode2": "^1.0.1"
+  }
+}

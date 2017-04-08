@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+    <title>吐槽建议</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <style>
+    .weui-cells{
+        margin-top: 0;
+    }
+    .weui-cells .weui-cell__bd .topInfo{
+        font-size: 14px;
+        line-height: 30px;
+    }
+    .weui-cells .weui-cell__bd .secondInfo{
+        font-size: 12px;
+        color: #666;
+    }
+    .aaUserContent{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px;
+        background: #f7f7f7;
+    }
+    .aaUserContent .weui-btn_plain-primary{
+        font-size: 14px;
+        border-radius: 0;
+        color: #f59923;
+        border: 1px solid #f59923;
+    }
+    .weui-cells:before{
+        border-top: none;
+    }
+    .noData{
+        padding: 20px;
+        text-align: center;
+        color: #ccc;
+    }
+    #feedbackContent .editMain{
+        padding: 45px 10px 0 10px;
+        background: #f7f7f7;
+        height: 100%;
+    }
+    #feedbackContent .editMain p{
+        font-size: 14px;
+        color: #666;
+        margin: 10px 0;
+        text-indent: 10px;
+    }
+    #feedbackContent .editMain textarea{
+        line-height: 25px;
+        width: 100%;
+        text-indent: 10px;
+    }
+    .hasHeaderTop .mainContanier{
+        padding: 45px 0 60px 0;
+    }
+    </style>
+</head>
+<body class="hasHeaderTop">
+    <div class="headerTop">
+        <div class="leftPart">
+            <i class="fa fa-angle-left"></i>
+        </div>
+        <div class="title">
+            吐槽建议
+        </div>
+    </div>
+    <!--banner end-->
+    <div class="mainContanier">
+    </div>
+
+    <div class="aaUserContent">
+        <a href="javascript:void(0)" class="weui-btn weui-btn_plain-primary open-popup" data-target="#feedbackContent">
+            <i class="fa fa-commenting-o"></i> 吐槽&建议    
+        </a>
+    </div>
+
+    <div id="feedbackContent" class="weui-popup__container">
+      <div class="weui-popup__overlay"></div>
+      <div class="weui-popup__modal">
+        <div class="headerTop">
+            <div class="leftPart">
+                <i class="fa fa-times close-popup"></i>
+            </div>
+            <div class="title">
+                吐槽建议
+            </div>
+            <div class="rightPart" id="editSave">
+              保存
+            </div>
+        </div>
+        <div class="editMain">
+           <p>请留下您宝贵的意见，以帮助我们做的更好</p>
+            <textarea name="" id="feedback" placeholder="请简要描述您遇到的问题，我们会尽快的为您解决（最少5个字）"></textarea>
+        </div>
+      </div>
+    </div>
+
+<!-- body 最后 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/js/swiper.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="../../pc/js/tool
+s.js"></script>
+<script type="text/javascript">
+
+//当前登录的用户Id
+var userId = $.cookie('userId');
+
+//反馈内容
+var $feedback = $("#feedback");
+
+var $editSave = $("#editSave");
+
+getFeedbackList(userId);
+
+//点击完成
+$editSave.on('click',function(){
+    var value = $feedback.prop('value');
+    var timestamp = Date.parse(new Date()); 
+    if(value.length < 5)
+    {
+        $.alert("至少五个字")
+    }
+    else
+    {
+
+         $.ajax({
+            type:'post',
+            url:'/views/index/addFeedback',
+            data:{'user_id':userId,'title':value,'date':Tools.getDateTime(timestamp)},
+            success: function(data){
+                if(data.code == 200 ){
+                    $.alert("操作成功！",function(){
+                        location.reload();
+                    })
+                }
+                else 
+                {
+                    $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+                }
+            },
+            error: function(){
+                $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+            }
+        })
+    }
+})
+
+//返回按钮
+$(".headerTop").on('click','.leftPart',function()
+{
+    location.href = "userCenter.html"
+})
+//获得当前登录用户已经添加过的用户信息列表
+function getFeedbackList(userId){
+    $.ajax({
+    type:'get',
+    url:'/views/index/getFeedbackList',
+    data:{'userId':userId},
+    success: function(data){
+      var $raiderList = $(".mainContanier");
+      var list = "";
+      if(data.length > 0){
+        $raiderList.empty();
+        //首页只有六条数据
+        $.each(data,function(){
+          var value = this;
+          var sex = value.sex == 0 ? '男':'女';
+          list += '<div class="weui-cells weui-cells_checkbox" data-id='+value.id+'>'+
+                '<label class="weui-cell weui-check__label" for="s'+value.id+'">'+
+                '<div class="weui-cell__bd">'+
+                '<p class="topInfo">'+value.title+'</p>'+
+                '<p class="secondInfo">'+Tools.hasTime(value.date)+'</p></div></label></div>'
+        })
+        $raiderList.append(list);
+      }else{
+         $raiderList.append('<p class="noData">当前您还没有任何反馈记录</p>'); 
+      }
+    }
+
+  })
+}
+
+</script>
+</body>
+</html>

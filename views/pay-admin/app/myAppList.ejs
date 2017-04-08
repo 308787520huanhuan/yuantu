@@ -1,0 +1,381 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>后台管理系统</title>
+<link href="/pay-admin/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/pay-admin/css/londinium-theme.min.css" rel="stylesheet"
+	type="text/css">
+<link href="/pay-admin/css/styles.min.css" rel="stylesheet" type="text/css">
+<link href="/pay-admin/css/icons.min.css" rel="stylesheet" type="text/css">
+
+<script type="text/javascript" src="/pay-admin/js/jquery/1.10.1/jquery.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/jquery/1.10.2/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/charts/sparkline.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/uniform.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/select2.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/inputmask.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/autosize.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/inputlimit.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/listbox.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/multiselect.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/validate.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/tags.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/forms/switch.min.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/forms/uploader/plupload.full.min.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/forms/uploader/plupload.queue.min.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/interface/daterangepicker.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/interface/fancybox.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/interface/prettify.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/interface/moment.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/interface/jgrowl.min.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/interface/datatables.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/plugins/interface/colorpicker.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/interface/fullcalendar.min.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/interface/timepicker.min.js"></script>
+<script type="text/javascript"
+	src="/pay-admin/js/plugins/interface/collapsible.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/pay-admin/js/application.js"></script>
+
+</head>
+<body class="sidebar-wide">
+
+	
+
+
+
+
+
+<!-- Navbar -->
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="navbar-header">
+		 
+		
+		
+
+
+<a class="navbar-brand" href="/pay-admin/">
+	<img id="headerLogoImg" >
+</a>
+
+<script>
+var hostName = location.hostname;
+if('mgr.citywemedia.cn'==hostName){
+	document.getElementById("headerLogoImg").setAttribute("src", "/pay-admin/images/logo_citywemedia.png");
+}else{
+	document.getElementById("headerLogoImg").setAttribute("src", "/pay-admin/images/logo.png");
+}
+</script>
+		
+			<a class="sidebar-toggle"><i
+			class="icon-paragraph-justify2"></i></a>
+		<button type="button" class="navbar-toggle" data-toggle="collapse"
+			data-target="#navbar-icons">
+			<span class="sr-only">Toggle navbar</span><i class="icon-grid3"></i>
+		</button>
+		<button type="button" class="navbar-toggle" data-toggle="collapse"
+			data-target=".sidebar">
+			<span class="sr-only">Toggle navigation</span><i
+				class="icon-paragraph-justify2"></i>
+		</button>
+	</div>
+	<ul class="nav navbar-nav navbar-right collapse" id="navbar-icons">
+		<li class="user dropdown"><a class="dropdown-toggle"
+			data-toggle="dropdown"><img src="/pay-admin/images/demo/users/default_avatar.jpg"
+				alt="">
+				<span>
+					<%= session["nickname"] %>
+				</span>
+				<i class="caret"></i>
+			</a>
+		<ul class="dropdown-menu dropdown-menu-right icons-right">
+				<li><a href="../profile/profile"><i class="icon-user"></i>
+						个人资料</a></li>
+				<li><a href="../password/password"><i class="icon-lock"></i>
+						修改密码</a></li>
+				<li><a href="../login/loginOut"><i class="icon-exit"></i>
+						注销</a></li>
+			</ul></li>
+	</ul>
+</div>
+
+<!-- /navbar -->
+
+
+
+	<!-- Page container -->
+	<div class="page-container">
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="sidebar collapse">
+	<div class="sidebar-content">
+
+		<div class="user-menu dropdown">
+			<a href="#"><img src="/pay-admin/images/demo/users/default_avatar.jpg" 
+				alt="">
+			<div class="user-info">
+                <%= session["nickname"] %> <span>管理员</span>
+				</div></a>
+		</div>
+
+
+		<!-- Main navigation -->
+		<ul class="navigation navigation-icons-left"">
+			
+		
+			<li >
+				<a href="#" class="expand" id='second-level'><span>CP应用相关</span>
+					<i class="icon-grid"></i></a>
+			<ul>
+			
+				<li><a href="#" >我的应用列表</a></li>
+
+				<li><a href="../myProductPaging/myProductPaging" >我的平台列表</a></li>
+                
+
+				<li><a href="/pay-admin/example/signExample" >签名工具</a></li>
+			
+			</ul>
+			</li>
+			
+		  <li>
+                <a href="#" class="expand" id="second-level">
+                    <span>数据查询</span>
+                    <i class="icon-grid"></i>
+                </a>
+                <ul>
+                            <li><a href="../alllist/alllist">统计数据</a></li>
+                            <li><a href="../payGameInfo/payGameInfo">订单查询</a></li>
+                </ul>
+		    </li>
+
+			<li >
+				<a href="#" class="expand" id='second-level'><span>个人中心</span>
+					<i class="icon-grid"></i></a>
+			<ul>
+			
+				<li><a href="../profile/profile" >个人信息</a></li>
+			
+				<li><a href="../index/index" >首页</a></li>
+			
+			</ul>
+			</li>
+			
+		</ul>
+		<!-- /main navigation -->
+	</div>
+</div>
+
+		<!-- Page content -->
+		<div class="page-content">
+			<!-- Page header -->
+			<div class="page-header">
+				<div class="page-title">
+					<h3>
+						我的应用列表
+						<!-- 
+						<small>Headings, lists, code, pre etc. </small>
+						 -->
+					</h3>
+				</div>
+			</div>
+			<!-- /page header -->
+			<!-- Breadcrumbs line -->
+			<div class="breadcrumb-line">
+				<ul class="breadcrumb">
+					<li><a href="../index/index">首页</a></li>
+					<li class="active">我的应用列表</li>
+				</ul>
+				<div class="visible-xs breadcrumb-toggle">
+					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
+						data-target=".breadcrumb-buttons"><i class="icon-menu2"></i></a>
+				</div>
+			</div>
+			<!-- /breadcrumbs line -->
+			
+			<div class="callout callout-info fade in">
+				<button type="button" class="close" data-dismiss="alert">×</button>
+				<h5>功能介绍</h5>
+				<p>
+				</p>
+			</div>
+			
+			
+			<form id="validate" action="../myappList/myapplist" method="post" >
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>条件筛选
+						</h6>
+					</div>
+					<div class="panel-body"> 
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label>游戏名称:</label>
+								<!--	<input type="text" name="appName" placeholder="支持模糊匹配" class="form-control" value=""/> -->
+                                    <select name="appName" class="form-control">
+                                        <%option.forEach(function(data){%>
+                                        <option value="<%= data['ID'] %>"><%= data["appName"]%></option>
+                                        <%})%>
+                                    </select>
+								</div>
+							</div>
+						</div>
+					
+						<div class="form-actions text-center">
+							<input type="submit" value="查 询" class="btn btn-primary btn-sm"> 
+							<input type="reset" value="重 置" class="btn btn-default btn-sm">
+						</div>
+					</div>
+				</div>
+			</form>
+			
+			 
+			<!-- Table view -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h5 class="panel-title">
+                        <i class="icon-people"></i>我的应用列表
+                    </h5>
+                    <a href="../myAppEdit/gotoAddMyApp"><span class="label label-danger pull-right">新增应用</span></a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped dataTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>游戏英文名字</th>
+                                <th>游戏中文名字</th>
+                                <th>secretKey</th>
+                                <!--<th>loginUrl</th>
+                        <th>paybackUrl</th>-->
+                                <th class="team-links">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% list.forEach(function(data){ %>
+                            <tr>
+                                <td><%= data["ID"] %></td>
+                                <td><%= data["name"] %></td>
+                                <td><%= data["appName"] %></td>
+                                <td><%= data["secretKey"] %></td>
+                                <td class='text-center'>
+                                    <div class="table-controls">
+                                        <%if(session["nickname"]=="xiaoxiao"){%>
+                                        <a href="../myAppEdit/myAppInfoById?ID=<%= data['ID']%>"
+                                           class="btn btn-link btn-icon btn-xs tip" title=""
+                                           data-original-title="编辑"><i class="icon-pencil3"></i>
+                                        </a>
+                                         <%}else{%>
+                                           <a></a>
+                                            <%}%>
+                                        <a href="../myAppEdit/deleteMyGame?ID=<%= data['ID']%>"
+                                           class="btn btn-link btn-icon btn-xs tip" title=""
+                                           data-original-title="删除"><i class="icon-cancel"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+                <ul class="pagination pagination-centered" style="margin-left:60%">
+                    <% var prevNum = 10; var nextNum=10; %>
+                    <%if(pager.pageCount-pager.pageCurrent > 5){%>
+                    <% prevNum = 5 %>
+                    <%} else {%>
+                    <%prevNum = prevNum - (pager.pageCount-pager.pageCurrent)%>
+                    <%}%>
+                    <%if(pager.pageCurrent-5 > 0){%>
+                    <% nextNum = 5 %>
+                    <%} else {%>
+                    <%nextNum = nextNum - (pager.pageCurrent) %>
+                    <%}%>
+
+                    <% if(pager.pageCount-pager.pageCurrent > 5 &&pager.pageCurrent-5 > 0 ){%>
+                    <% prevNum=5%>
+                    <% nextNum=4%>
+                    <%}%>
+                    <li class="disabled"><a href="javascript:void(0)"> 共<%=pager.maxNum%>条</a></li>
+                    <li class="disabled"><a href="javascript:void(0)"> 总<%=pager.pageCount%> 页 </a></li>
+                    <%if(pager.maxNum==0){%>
+                    <li class="disabled"><a href="javascript:void(0)">首页</a></li>
+                    <%}else{%>
+                    <li><a href="<%=pager.pagePath%>current=1">首页</a></li>
+                    <%}%>
+                    <%if(pager.pageCurrent==1){%>
+                    <li class="disabled"><a href="javascript:void(0)">上一页</a></li>
+                    <%}else{%>
+                    <%if(pager.maxNum==0){%>
+                    <li class="disabled"><a href="javascript:void(0)">上一页</a></li>
+                    <%}else{%>
+                    <li><a href="<%=pager.pagePath%>current=<%=parseInt(pager.pageCurrent)-1%>">上一页</a></li>
+                    <%}%>
+                    <%}%>
+                    <% for(var i = prevNum; i > 0; i--){ %>
+                    <%  if( parseInt(pager.pageCurrent)-i > 0 ) { %>
+                    <li><a href="<%=pager.pagePath%>current=<%=parseInt(pager.pageCurrent)-i%>"><%=(parseInt(pager.pageCurrent)-i)%></a></li>
+                    <%}}%>
+                    <li class="active"><a href="<%=pager.pagePath%>current=<%=pager.pageCurrent%>"><%=pager.pageCurrent%></a></li>
+                    <% for(var i = 1; i <=nextNum; i++){ %>
+                    <%  if( parseInt(pager.pageCurrent)+i <= pager.pageCount ) { %>
+                    <li><a href="<%=pager.pagePath%>current=<%=parseInt(pager.pageCurrent)+i%>"><%=parseInt(pager.pageCurrent)+i%></a></li>
+                    <%}}%>
+                    <%if(pager.pageCurrent==pager.pageCount){%>
+                    <li class="disabled"><a href="javascript:void(0)">下一页</a></li>
+                    <%}else{%>
+                    <%if(pager.maxNum==0){%>
+                    <li class="disabled"><a href="javascript:void(0)">下一页</a></li>
+                    <%}else{%>
+                    <li><a href="<%=pager.pagePath%>current=<%=parseInt(pager.pageCurrent)+1%>">下一页</a></li>
+                    <%}%>
+
+                    <%}%>
+                    <%if(pager.maxNum==0){%>
+                    <li class="disabled"><a href="javascript:void(0)">尾页</a></li>
+                    <%}else{%>
+                    <li><a href="<%=pager.pagePath%>current=<%=pager.pageCount%>">尾页</a></li>
+                    <%}%>
+                </ul>
+
+<div class="footer clearfix">
+	<div class="pull-right icons-group">
+		<a href="javascript:void(0)"><i class="icon-screen2"></i></a> <a
+			href="javascript:void(0)"><i class="icon-balance"></i></a> <a
+			href="javascript:void(0)"><i class="icon-cog3"></i></a>
+	</div>
+</div>
+<!-- /footer -->
+
+		</div>
+		<!-- /page content -->
+	</div>
+	<!-- /page container -->
+</body>
+</html>

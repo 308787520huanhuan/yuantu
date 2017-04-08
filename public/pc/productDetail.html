@@ -1,0 +1,383 @@
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>活动详情</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,600,400italic,700' rel='stylesheet' type='text/css'>
+
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="css/animate.css">
+	<!-- Flexslider -->
+	<link rel="stylesheet" href="css/flexslider.css">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="css/icomoon.css">
+	<!-- Magnific Popup -->
+	<link rel="stylesheet" href="css/magnific-popup.css">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/font-awesome.css">
+
+	<!--
+	Default Theme Style
+	You can change the style.css (default color purple) to one of these styles
+	-->
+	<link rel="stylesheet" href="css/style.css">
+
+	<!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+
+
+	<!-- Modernizr JS -->
+	<script src="js/modernizr-2.6.2.min.js"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+
+	<style>
+		#fh5co-header{
+			background: #f59923;
+		}
+		.tab_content{
+			margin-top: 50px;
+			border-bottom:2px solid #f7f7f7;
+			display: flex;
+		}
+		.tab_content .each_tab{
+			display: inline-block;
+			margin-right:20px;
+			padding: 10px 0;
+			font-size: 18px;
+			color: #484c50;
+			cursor: pointer;
+			flex: 1;
+			text-align: center;
+		}
+		.each_content img{
+			margin-bottom: 30px;
+		}
+		.tab_content .each_tab.active{
+			border-bottom: 2px solid #f59923;
+			color: #f59923;
+		}
+		.content_swap{
+			padding: 50px 20px;
+			line-height: 30px;
+			padding-left:100px; 
+		}
+	</style>
+
+	</head>
+
+	<body>
+		<div id="black-overlay" class="hidden">
+			<div class="login-reg-box">
+				<div class="login-box box" data-id="login">
+					<div class="holder" style="margin-top:0 ">
+							<div class="with-line">支付方式</div>
+							<div class="buttons small pay">
+								<div class="left-part" style="width: 200px">
+									<p>扫描微信二维码支付</p>
+									<img src="images/old.png" alt="" width="100%">
+								</div>
+								<div class="right-part" style="width: 200px">
+									<p>支付宝账号转账</p>
+									<span>133 9819 6433</span> <br/>
+									<span>名称：远徒户外</span>
+								</div>
+							</div>
+					</div>
+				</div>
+				<div class="close" id="close"><i></i></div>
+			</div>
+		</div>
+
+	<!-- Loader -->
+	<div class="fh5co-loader"></div>
+
+	<div id="fh5co-page">
+		<section id="fh5co-header">
+			<div class="container">
+				<nav role="navigation">
+					<ul class="pull-left left-menu">
+						<li class=" fadeInUp animated">
+							<img src="images/logo1.png"  ></li>
+					</ul>
+					<ul class="pull-right right-menu">
+						<li><a href="index.html">首页</a></li>
+						<li><a href="rightNow.html">立即出发</a></li>
+						<li><a href="gonglue.html">徒步攻略</a></li>
+						<li>
+							<a href="javascript:void(0)" class="hasSub">加入远徒</a>
+							<i class="arrow-top"></i>
+							<ul class="subList">
+								<li><a href="join.html">职员招聘</a></li>
+								<li><a href="contact.html">联系方式</a></li>
+								</ul>
+						</li>
+						<li>
+							<a href="javascript:void(0)" class="hasSub">关于远徒</a>
+							<i class="arrow-top"></i>
+							<ul class="subList">
+								<li><a href="about.html">远徒简介</a></li>
+								<li><a href="active.html">活动风采</a></li>
+								<li><a href="team.html">团队风采</a></li>
+								<li><a href="leader.html">领队风采</a></li>
+							</ul>
+						</li>
+						<!--<li style="margin-left:50px"><a href="#">登录</a></li>
+						<li><a href="#">注册</a></li>-->
+					</ul>
+				</nav>
+			</div>
+		</section>
+		<!-- #fh5co-header -->
+		<div id="fh5co_product_detail">
+			<div class="container">
+				<div class="top_content">
+					<div class="left_part">
+						<div class="img_show">
+							<img src="" data-label='icon1' alt="" id="show_img">
+						</div>
+						<ul class="img_lis">
+							<li class="active">
+								<img src="" alt="" data-label='icon1'>
+							</li>
+							<li>
+								<img src="" alt="" data-label='icon2'>
+							</li>
+							<li>
+								<img src="" alt="" data-label='icon3'>
+							</li>
+						</ul>
+						<div class="up"><img src="images/zan.png"><span class="upNumber" data-label='count_of_view'></span></div>
+						<!--<div class="row cellection_share">
+							<i class="fa fa-star-o fa-lg"></i>收藏
+							<i class="fa fa-share-square-o fa-lg ml20"></i>分享
+						</div>-->
+					</div>
+					<div class="right_part">
+						<h3 data-label='title'></h3>
+						<div class="row_content background_gray">
+							<lable class="left_lable">促&nbsp;销&nbsp;价</lable>
+							<span class="single_price">￥ <span data-label='price'></span></span> 起/人
+							<span class="pull-right">已售 <span data-label="solded"></span>人 <span class="spare">/ &nbsp;&nbsp;剩余 <span data-label="still">3</span>人</span></span>
+						</div>
+						<!--<div class="row_content">
+							<lable class="left_lable">优惠信息</lable>
+							<span>2-3人报名 享98折优惠；4-5人享95折优惠；6-7人享85折优惠</span>
+						</div>-->
+						<div class="row_content">
+							<lable class="left_lable">预定须知</lable>
+							<span>建议提前一天预定</span>
+						</div>
+						<div class="row_content main-color">
+							<lable class="left_lable">活动时间</lable>
+							<span><span data-label='starttime'></span> - <span data-label='endtime'></span></span>
+						</div>
+						<div class="row_content">
+							<lable class="left_lable">产品类型</lable>
+							<div class="package_type">
+							</div>
+						</div>
+						<div class="row_content background_gray btn_content">
+							<lable class="left_lable"></lable>
+							<span class="single_price">￥<span class="total_price">00.00</span></span>
+							<span class="pull-right pay_now">立即购买</span>
+						</div>
+					</div>
+				</div>
+				<div class="bottom_content">
+					<div class="tab_content">
+						<div class="each_tab active">
+							产品介绍
+						</div>
+						<div class="each_tab">
+							行程安排
+						</div>
+						<div class="each_tab">
+							费用说明
+						</div>
+						<div class="each_tab">
+							活动须知
+						</div>
+					</div>
+					<div class="content_swap">
+						<div class="each_content" data-lable="introduce" id="info">
+						</div>
+						<div class="each_content hide" data-lable="schedule" id="scheduling">
+						
+						</div>
+						<div class="each_content hide" data-lable="fee" id="costDescription">
+						</div>
+						<div class="each_content hide" data-lable="must" id="purchaseNotice">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- END #fh5co-page -->
+
+
+	<!-- jQuery -->
+	<script src="js/jquery.js"></script>
+	<!-- jQuery Easing -->
+	<script src="js/jquery.easing.1.3.js"></script>
+	<!-- Bootstrap -->
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Waypoints -->
+	<script src="js/jquery.waypoints.min.js"></script>
+	<!-- Flexslider -->
+	<script src="js/jquery.flexslider-min.js"></script>
+	<!-- Magnific Popup -->
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script src="js/magnific-popup-options.js"></script>
+
+	<!-- Main JS (Do not remove) -->
+	<script src="js/main.js"></script>
+	<script src="js/tools.js"></script>
+
+	<script src="js/jquery.cookie.js"></script>
+
+	<script src="../wx/js/jquery-weui.js"></script>
+	<script>
+	$(function(){
+		var $page = $("#fh5co-page");
+		var $img = $("#show_img");
+
+		//总共的价格
+		var $total_price = $(".total_price");
+
+		var packagePrcie = 0;
+
+		//套餐id
+		var package_id = 0;
+		
+		//套餐
+		var $package_type = $(".package_type");
+		
+		//活动ID
+		var activityId = $.cookie('activityId');
+
+		//浏览次数
+		// var num = parseInt($.cookie('num'));
+
+		//剩余几张
+		var still = 0;
+		
+
+		//请求活动详情
+		$.ajax({
+			type:'get',
+			url:'/views/index/getActivityInfo',
+			data:{'id':activityId},
+			success: function(data)
+			{
+				var comment = data.comment;
+				data = data.info;
+
+				for ( var option in data) 
+				{
+					var value = data[option];
+					if($("[data-label='" + option + "']").is('span,h3'))
+					{
+						$("[data-label='" + option + "']").html(data[option]);
+					} 
+					else if($("[data-label='" + option + "']").is('img'))
+					{
+						$("[data-label='" + option + "']").prop('src',data[option]);
+					}
+					else if($("[data-lable='" + option + "']").is('div'))
+					{
+					$("[data-lable='" + option + "']").html(decodeURIComponent(data[option]));
+					}
+					
+					//构建套餐列表
+					if( option == 'package'){
+						
+						//循环遍历套餐内容
+						var lis = ''
+						$.each(data[option],function(){
+							lis += '<p data-id="'+this.id+'" data-price="'+this.price+'">'+this.detail+' <i class="fa fa-check"></i></p>'
+						})
+
+						$package_type.append(lis);
+					}
+
+					//默认选中第一个套餐
+					$package_type.find("p:first").trigger('click');
+				}
+
+				// 剩余几张
+				still = data.maxnum - data.solded;
+				$("[data-label='still']").text(still);
+			}
+
+		})
+
+		//tab切换
+		$(".tab_content").on("click",".each_tab",function(){
+			var $this = $(this);
+			var index = $this.index();
+			var status = $this.data('status');
+			$this.addClass("active").siblings().removeClass("active");
+			$(".each_content").eq(index).removeClass("hide").siblings().addClass("hide");
+		})
+
+		//图片展示
+		$('.img_lis li').mouseover(function(){
+			var $this = $(this);
+			if(!$this.hasClass('active')){
+				var src = $this.find("img").prop('src');
+				$img.prop('src',src);
+				$this.addClass('active').siblings('li').removeClass('active')
+			}
+		})
+
+		//切换套餐的ID
+		$package_type.on('click','p',function(){
+			var $this = $(this);
+			packagePrcie = $this.data('price');
+			package_id = $this.data('id');
+
+			if(!$this.hasClass('active')){
+				$this.addClass('active').siblings('p').removeClass('active')
+
+				$total_price.text(parseInt(packagePrcie));
+			}
+		})
+
+		//立即购买
+		$(".pay_now").on('click',function(){
+			if(packagePrcie == 0){
+				$.alert("很抱歉,活动还未开始，暂时不能购买");
+			}else{
+
+				$("#black-overlay").removeClass('hidden')
+				// $.cookie('activityPrice',packagePrcie);
+				// $.cookie('packageId',package_id);
+
+				// //跳转到添加用户界面
+				// location.href = 'addUser.html';
+			}
+			
+		})
+
+	});
+	</script>
+
+	</body>
+</html>

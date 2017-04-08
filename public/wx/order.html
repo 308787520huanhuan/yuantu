@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+    <title>我的订单</title>
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+    <style>
+      #orderPage{
+        height: 100%;
+        color: #666;
+      }
+      .tab_content{
+        border-bottom: 1px solid #eee;
+        display: flex;
+      }
+      .each_tab{
+        flex: 1;
+        text-align: center;
+        padding: 10px 0;
+      }
+      .each_tab i{
+        display: inline-block;
+        width: 100%;
+        font-size: 16px;
+      }
+      .each_tab.active{
+        color: #f59923;
+      }
+      .each_tab lable{
+        font-size: 12px;
+      }
+      .each_content{
+        height: 100%;
+      }
+      .nodata{
+        text-align: center;
+        padding-top: 50px;
+      }
+      .dataList{
+        background: #fff;
+        height: 100%;
+      }
+      .dataList .topInfo{
+        font-size: 12px;
+        padding:0 5px;
+        height: 40px;
+        line-height: 40px;
+      }      
+      .main-container{
+        background: #F7F7F7;
+        display: flex;
+        flex-direction: row;
+        padding: 5px;
+        position: relative;
+      }
+      .main-container .flag{
+        position: absolute;
+        right: 10px;
+        top: 10px;
+      }
+      .right-part{
+        flex: 1;
+        padding-left:10px 
+      }
+      .right-part p{
+        font-size: 12px;
+        color: #999;
+        line-height: 20px;
+      }
+      .right-part .title{
+        color: #000;
+        font-size: 12px;
+        line-height: 25px;
+      }
+      .operat-container{
+        border-bottom: 1px solid #F7F7F7;
+        padding: 5px 0;
+        height: 25px;
+        line-height: 25px;
+        text-align: right;
+      }
+      .operat-container .pay-botton{
+        display: inline-block;
+        border: 1px solid #999;
+        width: 70px;
+        color: #999;
+        text-align: center;
+        height: 20px;
+        line-height: 20px;
+        font-size: 12px;
+        margin-right: 10px;
+      }
+      .operat-container .pay-botton.active{
+        color: #f59923;
+        border-color: #f59923;
+      }
+      .editMain{
+        padding:50px 10px 0 10px;
+        /*background: #fff;*/
+        height: 100%;
+      }
+      .editMain textarea
+      {
+        line-height: 25px;
+        width: 100%;
+        min-height: 200px;
+        text-indent: 10px;
+    }
+    </style>
+</head>
+<body>
+<div id="orderPage">
+    <div class="tab_content">
+      <div class="each_tab" data-status="1">
+        <i class="fa fa-credit-card-alt"></i>
+        <lable>待付款</lable>
+      </div>
+      <div class="each_tab" data-status="2">
+        <i class="fa fa-car"></i>
+        <lable>待出行</lable>
+      </div>
+      <div class="each_tab" data-status="3">
+        <i class="fa fa-smile-o"></i>
+        <lable>待评价</lable>
+      </div>
+      <div class="each_tab" data-status="-1">
+        <i class="fa fa-list"></i>
+        <lable>全部订单</lable>
+      </div>
+    </div>
+    <div class="content_swap">
+      <div class="each_content hide">
+      </div>
+      <div class="each_content hide">
+       
+      </div>
+      <div class="each_content hide">
+        
+      </div>
+      <div class="each_content hide">
+        
+      </div>
+
+    </div>
+</div>
+<div class="hasHeaderTop">
+  <div id="feedbackContent" class="weui-popup__container">
+  <div class="weui-popup__overlay"></div>
+  <div class="weui-popup__modal">
+    <div class="headerTop">
+        <div class="leftPart">
+            <i class="fa fa-times close-popup"></i>
+        </div>
+        <div class="title">
+            评论
+        </div>
+        <div class="rightPart" id="editSave">
+          保存
+        </div>
+    </div>
+    <div class="editMain">
+        <textarea name="" id="recommendContent" placeholder="本次旅行还满意吗？与大家分享一下途中的开心与不开心吧（最少10个字）" maxlength="255">一直都在水泥和墙砖切起的大都市生活，难得有次机会出去走走，都说人的身体或者心灵总得有一个在途中，感觉这一次的旅行是两者合一，非常让人难忘！！</textarea>
+    </div>
+  </div>
+</div>
+</div>
+<!-- body 最后 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="../../pc/js/tools.js"></script>
+<script src="js/fastclick.js"></script>
+<script src="js/ap.js"></script>
+<script src="../../pingpp-js/dist/pingpp.js"></script>
+<script>
+  $(function() 
+  {
+    FastClick.attach(document.body);
+
+    var $orderPage = $("#orderPage");
+    var $tabList = $(".tab_content .each_tab");
+    var $contentList = $(".each_content");
+    var userId = $.cookie("userId");
+    var flagOrderId,flagActivityId;
+
+    //tab切换
+    $tabList.on("click",function()
+    {
+      var $this = $(this);
+      var index = $this.index();
+      var status = $this.data('status');
+      $this.addClass("active").siblings().removeClass("active");
+      $(".each_content").eq(index).removeClass("hide").siblings().addClass("hide");
+
+      //获得订单列表
+      getOrderList(status,index);
+
+    })
+
+    //选中第一个tab
+    $tabList.eq(0).trigger('click');
+
+    //取消订单
+    $orderPage.on("click","#cancle",function()
+    {
+      
+      var $this = $(this);
+      var orderId = $this.closest("li").data("id");
+      var activityId = $this.closest("li").data("activity");
+      $.confirm("你确定要取消该订单吗？", function() 
+      {
+          $.ajax
+        ({
+          type:'get',
+          url:'/views/index/cancelOrder',
+          data:{orderId:orderId,activityId:activityId},
+          success: function(data) 
+          {
+              if (data.code != 200) 
+              {
+                $.alert(data.message)
+              }
+              else
+              {
+                $.alert("操作成功",function()
+                {
+                  window.location.reload();
+                })
+              }
+          }
+        })
+      });
+    })
+    //删除订单
+    .on("click","#delete",function()
+    {
+      var $this = $(this);
+      var orderId = $this.closest("li").data("id");
+      var activityId = $this.closest("li").data("activity");
+      $.confirm("你确定要删除该订单吗？", function() 
+      {
+          $.ajax
+        ({
+          type:'get',
+          url:'/views/index/deleteOrder',
+          data:{orderId:orderId},
+          success: function(data) 
+          {
+              if (data.code != 200) 
+              {
+                $.alert(data.message)
+              }
+              else
+              {
+                $.alert("操作成功",function()
+                {
+                  window.location.reload();
+                })
+              }
+          }
+        })
+      });
+    })
+    //确认行程结束
+    .on("click","#sureFinish",function()
+    {
+      var $this = $(this);
+      var orderId = $this.closest("li").data("id");
+      $.confirm("确认已经结束行程吗？", function() 
+      {
+          $.ajax
+          ({
+            type:'get',
+            url:'/views/index/sureFinish',
+            data:{orderId:orderId},
+            success: function(data) 
+            {
+                if (data.code != 200) 
+                {
+                  $.alert(data.message)
+                }
+                else
+                {
+                  $.alert("操作成功",function()
+                  {
+                    window.location.reload();
+                  })
+                }
+            }
+          })
+      });
+    })
+    //评价
+    .on("click","#recommendBtn",function()
+    {
+      flagOrderId = $(this).closest("li").data("id");
+      flagActivityId = $(this).closest("li").data("activity");
+    })
+    //评论保存
+    $("#editSave").on("click",function()
+    {
+      //flagOrderId = $(this).closest("li").data("id");
+      var text = $("#recommendContent").prop("value");
+      if(text.length < 10)
+      {
+        $.alert("请输入不小于10字的评论");
+        return;
+      }
+      else
+      {
+        var timestamp = Date.parse(new Date()); 
+        var add_time = Tools.getDateTime(timestamp);
+
+        $.ajax
+          ({
+            type:'get',
+            url:'/views/index/saveRecommend',
+            data:{user_id:userId,comtent:text,activity_id:flagActivityId,add_time:add_time,up:0,orderId:flagOrderId},
+            success: function(data) 
+            {
+                if (data.code != 200) 
+                {
+                  $.alert(data.message)
+                }
+                else
+                {
+                  $.alert("操作成功",function()
+                  {
+                    window.location.reload();
+                  })
+                }
+            }
+          })
+      }
+    })
+
+    //点击支付
+    $orderPage.on("click","#pay",function()
+    {
+      var $this = $(this);
+      var orderId = $this.closest("li").data("id");
+      var amount = $this.closest("li").data("price");
+      var endtime = $this.closest("li").data("endtime");
+
+        $.actions({
+        title:'选择支付方式',
+        actions: [{
+          text: "微信支付",
+          onClick: function() 
+          {
+            //微信支付订单
+            $.ajax
+            ({
+              type:'get',
+              url:'/views/index/pay',
+              data:{orderId:orderId,amount:amount,channel:"wx_pub"},
+              success: function(data) 
+              {
+                  if (data.error) 
+                  {
+                    $.alert(data.error.type+","+data.error.message)
+                    return;
+                  }
+                  //唤起微信支付
+                  pingpp.createPayment(data.charge, function(result, err) 
+                  {
+                    if (result == "success") 
+                    {
+                        // 只有微信公众账号 wx_pub 支付成功的结果会在这里返回，其他的支付结果都会跳转到 extra 中对应的 URL。
+                        isFirstOrder(1,orderId,endtime);
+                    } 
+                    else if (result == "fail") 
+                    {
+                        // charge 不正确或者微信公众账号支付失败时会在此处返回
+                    } 
+                    else if (result == "cancel") 
+                    {
+                        // 微信公众账号支付取消支付
+                    }
+                });
+              }
+            })
+          }
+        },
+        {
+          text: "支付宝支付",
+          onClick: function() 
+          {
+            //支付宝支付订单
+            $.ajax({
+              type:'get',
+              url:'/views/index/pay',
+              data:{orderId:orderId,amount:amount,channel:"alipay_wap"},
+              success: function(data) 
+              {
+                  if (data.error) 
+                  {
+                    $.alert(data.error.type+","+data.error.message)
+                    return;
+                  }
+                  //唤起支付宝支付
+                  pingpp.createPayment(data.charge, function(result, err) 
+                  {
+                    if (result == "success") 
+                    {
+                        isFirstOrder(2,orderId,endtime);
+                        // 只有微信公众账号 wx_pub 支付成功的结果会在这里返回，其他的支付结果都会跳转到 extra 中对应的 URL。
+                    } else if (result == "fail") 
+                    {
+                        // charge 不正确或者微信公众账号支付失败时会在此处返回
+                    } else if (result == "cancel") 
+                    {
+                        // 微信公众账号支付取消支付
+                    }
+                });
+              }
+            })
+          }
+        }]
+      });
+    })
+    function isFirstOrder(type,orderId,endtime)
+    {
+
+      $.ajax
+      ({
+        type:'get',
+        url:'/views/index/isFirstOrder',
+        data:{userId:userId,orderId:orderId,endtime:endtime,add_time:add_time},
+        success: function(data) 
+        {
+          if(data.code == 200 && type == 1)
+          {
+            if(data.isFirstOrder)
+            {
+              $.alert("首次下单成功，赠送5元优惠券一张",function()
+              {
+                window.location.reload();
+              })
+            }
+            else
+            {
+              window.location.reload();
+            }
+            
+          }
+        }
+      })
+    }
+
+    function getOrderList(status,index)
+    {
+      $.ajax
+      ({
+          type:'get',
+          url:'/views/index/orderList',
+          data:{'status':status,'userId':userId},
+          success: function(data)
+          {
+            var list = "";
+            var $content = $contentList.eq(index);
+            $content.empty();
+            if(data.length > 0)
+            {
+              //首页只有六条数据
+              $.each(data,function()
+              {
+                var value = this;
+                var operate = '',status = '',img = "";
+                //状态(0:已取消，1：待付款，2：待出行，3：待评价，4：已完成)
+                switch(this.status)
+                {
+                  case 0:
+                    status = "已取消";
+                    operate = '<a href="javascript:void(0)" class="pay-botton" id="delete">删除订单</a>';
+                    break;
+                  case 1:
+                    status = "待付款";
+                    operate = '<a href="javascript:void(0)" class="pay-botton" id="cancle">取消订单</a><a href="javascript:void(0)" class="pay-botton active " id="pay">付款</a>';
+                    break;
+                  case 2:
+                    status = "待出行";
+                    //如果活动的开始时间小于当前时间 表示活动已经开始
+                    if(new Date(this.starttime).getTime() < new Date().getTime())
+                    {
+                      img = "<img src='img/ycx.png' class='flag'>"
+                    }
+                    if(new Date(this.endtime).getTime() < new Date().getTime())
+                    {
+                      operate = '<a href="javascript:void(0)" class="pay-botton active" id="sureFinish">行程已完成</a>';
+                    }
+                    
+                    break;
+                  case 3:
+                    status = "待评价";
+                    operate = '<a href="javascript:void(0)" class="pay-botton active open-popup" id="recommendBtn" data-target="#feedbackContent">评价</a>';
+                    break;
+                  case 4:
+                    status = "已完成";
+                    operate = '<a href="javascript:void(0)" class="pay-botton" id="delete">删除订单</a>';
+                    break;  
+                }
+                
+                list += '<li data-price='+this.price+' data-id='+this.id+' data-activity='+this.activity_id+' data-endTime='+this.endtime+'><div class="topInfo">'+
+                '<span class="pull-left">下单时间：'+this.add_time+'</span>'+
+                '<span class="pull-right" style="color:#f59923">'+status+'</span>'+
+                '</div>'+
+                '<div class="main-container">'+
+                img +
+                '<img src="'+this.icon+'" alt="" width="80" height="80">'+
+                '<div class="right-part">'+
+                '<p class="title">'+this.start+'—'+this.end+'</p>'+
+                '<p>开始时间：'+Tools.notHasTime(this.starttime)+'</p>'+
+                '<p>结束时间：'+Tools.notHasTime(this.endtime)+'</p>'+
+                '</div>'+
+                '</div>'+
+                '<div class="operat-container">'+
+                operate +
+                '</div>'+
+                '</li>'
+              })
+              $content.append('<ul class="dataList">' + list + '</ul>');
+            }
+            else
+            {
+              var noData = '<div class="nodata"><img src="img/nodata.png" alt="" height="50"><h5>您还没有相关的订单</h5><p style="margin-top:10px;">可以去<a href="rightNow.html" style="color:#136ec2;text-decoration:underline">立即出发</a>定制行程</p></div>'
+              $content.append(noData);
+            }
+          }
+      })
+    }
+  });
+</script>
+</body>
+</html>

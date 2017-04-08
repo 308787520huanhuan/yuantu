@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+    <title>吐槽建议</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <style>
+    .noData{
+        padding: 20px;
+        text-align: center;
+        color: #ccc;
+    }
+    .hasHeaderTop .mainContanier{
+        padding: 45px 10px 60px 10px;
+    }
+    .hasHeaderTop .rulesContent{
+        padding: 50px 10px 60px 10px;
+        background: #fff;
+        height: 100%;
+    }
+    .hasHeaderTop .rulesContent h4{
+        margin-bottom: 5px;
+    }
+    .hasHeaderTop .rulesContent p{
+        font-size: 14px;
+        padding-bottom: 20px;
+    }
+    .rulesBtn{
+        color: #ccc;
+        float: right;
+        padding-right:10px;
+    }
+    .counponList{
+        float: left;
+        width: 100%;
+    }
+
+    .eachContent{
+        border-radius: 5px;
+        height: 100px;
+        color: #f2f2f2;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: relative;
+        background: #f59923;
+    }
+    .eachContent > *{
+        position: absolute;
+    }
+    
+    .eachContent h5{
+        font-weight: normal;
+        font-size: 16px;
+    }
+    .eachContent p{
+        font-size: 13px;
+        top: 35px;
+    }
+    .bottomContent{
+        position: absolute;
+        bottom: 0;
+        left: 10px;
+        font-size: 13px;
+        display: flex;
+    }
+    .money{
+        font-size: 32px;
+        right: 10px;
+        top:10px;
+    }
+    </style>
+</head>
+<body class="hasHeaderTop">
+    <div class="headerTop">
+        <div class="leftPart">
+            <i class="fa fa-angle-left"></i>
+        </div>
+        <div class="title">
+            我的优惠券
+        </div>
+    </div>
+    <!--banner end-->
+    <div class="mainContanier">
+        <a class='rulesBtn open-popup' data-target="#feedbackContent"><i class="fa fa-question-circle" style="margin-right: 5px"></i>使用规则</a>
+        <div class="counponList">
+        </div>
+    </div>
+
+    <div id="feedbackContent" class="weui-popup__container">
+      <div class="weui-popup__overlay"></div>
+      <div class="weui-popup__modal">
+        <div class="headerTop">
+            <div class="title">
+                使用规则
+            </div>
+            <div class="rightPart" id="editSave">
+              <i class="fa fa-times close-popup"></i>
+            </div>
+        </div>
+        <div class="rulesContent">
+           <h4>一次活动能用几张优惠券？</h4>
+           <p>一次活动最多只能使用一张优惠券。</p>
+           <h4>优惠券是否可以找零和兑换？</h4>
+           <p>优惠券不支持找零和兑换。</p>
+           <h4>如何获得我的游记奖励券？</h4>
+           <p>点入我的远徒—我的游记—写游记—发布成功，即可获取奖励券，做抵现使用。</p>
+
+        </div>
+      </div>
+    </div>
+
+<!-- body 最后 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/js/swiper.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="../../pc/js/tools.js"></script>
+<script type="text/javascript">
+
+//当前登录的用户Id
+var userId = $.cookie('userId');
+
+
+getCounponList(userId);
+
+//返回按钮
+$(".headerTop").on('click','.leftPart',function()
+{
+    location.href = "userCenter.html"
+})
+
+//获得当前登录用户已经添加过的用户信息列表
+function getCounponList(userId)
+{
+    $.ajax
+    ({
+        type:'get',
+        url:'/views/index/getCounponList',
+        data:{'userId':userId},
+        success: function(data)
+        {
+            var $raiderList = $(".counponList");
+            var list = "";
+            if(data.length > 0)
+            {
+                $raiderList.empty();
+                
+                //首页只有六条数据
+                $.each(data,function()
+                {
+                    var value = this;
+                    var d1 = new Date(value.addTime);
+                    var endDate = Tools.DateAdd( "m ",6,d1); 
+                    var now   =   new   Date();
+                    //没有过期且没用
+                    if(endDate - now > 0 && value.counponStatus == 1)
+                    {
+                        
+                        var title = value.type == 1 ? "新人首次下单优惠券" : '我的游记奖励券'
+                        list += '<div data-id="41" class="eachContent">'+
+                                '<h5>'+title+'</h5>'+
+                                '<div class="money">￥'+this.money+'</div>'+
+                                '<p>有效期至：'+endDate.toLocaleDateString()+'</p>'+
+                                '<div class="bottomContent">仅限活动报名，抵现使用</div>'+
+                                '</div>'
+                    }
+                })
+                $raiderList.append(list);
+            }
+            else
+            {
+                $raiderList.append('<p class="noData">暂时没有优惠券</p>'); 
+            }
+        }
+  })
+}
+
+</script>
+</body>
+</html>

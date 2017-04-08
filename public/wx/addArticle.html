@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+    <title>写游记</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <style>
+    body
+    {
+        background: #f9f9f9;
+    }
+    .hasHeaderTop  .headerTop
+    {
+        border-bottom: none;
+    }
+    .hasHeaderTop .mainContanier
+    {
+        padding: 44px 0 60px 0;
+    }
+    .article_top
+    {
+        height: 120px;
+        background-size: cover;
+        position: relative;
+    }
+    .article_top .overlay 
+    {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #2a2d36;
+        opacity: .54;
+        z-index: 0;
+    }
+    .article_top #title
+    {
+        background-color:transparent;
+        position: absolute;
+        top: 10px;
+        left: 5px;
+        border: none;
+        outline: none;
+        color: #fff;
+        width: 300px;
+        font-size: 14px;
+    }
+    .article_top #title::-webkit-input-placeholder 
+    { /* WebKit browsers */  
+        color:    #fff;  
+    }  
+    .article_top #title:-moz-placeholder 
+    { /* Mozilla Firefox 4 to 18 */  
+        color:    #fff;  
+        opacity:  1;  
+    }  
+    .article_top #title::-moz-placeholder 
+    { /* Mozilla Firefox 19+ */  
+        color:    #fff;  
+        opacity:  1;  
+    }  
+    .article_top #title:-ms-input-placeholder 
+    { /* Internet Explorer 10+ */  
+        color:    #fff;  
+    }  
+    .article_top .weui-btn_plain-primary
+    {
+        position: absolute;
+        bottom: 10px;
+        right: 5px;
+        background: #fff;
+        color: #666;
+        font-size: 12px;
+        padding: 5px;
+        line-height: 20px;
+        border: none;
+    }
+    .article_content
+    {
+        padding: 10px 5px;
+    }
+    .article_content .addFile
+    {
+        width: 30px;
+        margin: 0 auto;
+        font-size: 12px;
+        border: none;
+        background: #ccc;
+        color: #fff;
+        padding: 0;
+        line-height: 20px;
+        margin-bottom: 10px;
+    }
+    .detail_content
+    {
+        background: #fff;
+        border-radius: 5px;
+        padding: 15px 5px;
+        margin-bottom: 10px;
+        position: relative;
+    }
+    .detail_content i
+    {
+        position: absolute;
+        color:#999;
+    }
+    .detail_content
+    {
+        display: flex
+    }
+    .detail_content img
+    {
+        display: block;
+        margin-left: 10px;
+    }
+    .detail_content textarea
+    {
+        height: 50px;
+        vertical-align: top;
+        border: none;
+        flex: 1;
+        padding: 5px;
+    }
+    .detail_content .delete{
+        top: 1px;
+        left: 1px;
+        font-size: 16px;
+    }
+    .detail_content .moveUp{
+        top: 1px;
+        right: 5px;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+    }
+    .detail_content .moveDown{
+        bottom: 1px;
+        right: 5px;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+    }
+    </style>
+</head>
+<body class="hasHeaderTop">
+    <div class="headerTop">
+        <div class="leftPart">
+            <i class="fa fa-angle-left fa-lg"></i>
+        </div>
+        <div class="title">
+            
+        </div>
+        <div class="rightPart" id="save">
+            完成
+        </div>
+    </div>
+    <!--banner end-->
+    <div class="mainContanier">
+        <div class="article_top">
+            <div class="overlay"></div>
+            <input type="text" id="title" placeholder="点击设置标题(最多20字)" maxlength="20">
+            <a href="javascript:void(0)" class="weui-btn weui-btn_plain-primary">
+                <form class="form-horizontal" enctype="multipart/form-data" method="post" action="javascript:;" role="form">
+                    <span class="">更换封面</span>
+                    <input class="weui-uploader__input" type="file" accept="image/*" name="file" data-type="1">    
+                </form>
+            </a>
+        </div>
+        <div class="article_content">
+            <a href="javascript:void(0)" class="weui-btn weui-btn_plain-primary addFile">
+                <form class="form-horizontal" enctype="multipart/form-data" method="post" acttuion="javascript:;" role="form">
+                    <i class="fa fa-plus"></i>
+                    <input class="weui-uploader__input" type="file" accept="image/*" name="file" data-type="2">    
+                </form>
+            </a>
+        </div>
+    </div>
+<!-- body 最后 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/js/swiper.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="../../pc/js/tools.js"></script>
+<script src="js/fastclick.js"></script>
+<script>
+  $(function() {
+    FastClick.attach(document.body);
+  });
+</script>
+<script type="text/javascript">
+var $page = $("body");
+
+//当前登录的用户Id
+var userId = $.cookie('userId');
+
+//已删除的
+var delDate = [];
+
+var $pageTitle = $(".title");
+
+//如果是编辑的话有游记的ID
+var articleId = $.cookie("articleId");
+
+var model = $.cookie("model");
+
+//头部 （背景图片和title）
+var $article_top = $(".article_top");
+
+//title
+var $title = $("#title");
+
+//文章swap
+var $article_content = $(".article_content");
+
+//上传文件
+var $addFileBtn = $(".addFile");
+
+var count_of_view,count_of_up,status
+
+//添加
+if(model == "add")
+{
+    $pageTitle.html("写游记");
+
+    //刚刚上传的图片
+    var url = $.cookie("article_url");
+    $article_top.css("background-image","url("+url+")").data('url',url);
+
+    $article_content.append('<div class="detail_content">'+
+                    '<i class="fa fa-times delete"></i>'+
+                    '<i class="fa fa-angle-up moveUp move" data-id="1"></i>'+
+                    '<i class="fa fa-angle-down moveDown move" data-id="2"></i>'+
+                    '<img src="'+url+'" alt="" width="60" height="60">'+
+                    '<textarea name=""></textarea></div>'+
+                    '<a href="javascript:void(0)" class="weui-btn weui-btn_plain-primary addFile">'+
+                    '<form class="form-horizontal" enctype="multipart/form-data" method="post" action="javascript:;" role="form">'+
+                    '<i class="fa fa-plus"></i>'+
+                    '<input class="weui-uploader__input" type="file" accept="image/*" name="file" data-type="2">'+    
+                    '</form>'+
+                    '</a>');
+
+}
+//编辑
+else
+{
+    $pageTitle.html("编辑");
+
+    $.ajax
+    ({
+        url:'/views/index/getArticleInfo',
+        type: 'POST',
+        data: {"articleId":articleId},
+        success: function(data)
+        {
+            if(200 === data.code) 
+            {
+                $title.prop("value",data.title);
+                $article_top.css("background-image","url("+data.background_img+")").data('url',data.background_img);
+
+                count_of_view  = data.count_of_view;
+                count_of_up  = data.count_of_up;
+                status  = data.status;
+
+                var content = ""; 
+                
+                $.each(data.content,function()
+                {
+                    var text = this.content == null ? "":this.content;
+                    content += '<div class="detail_content" data-id='+this.id+'>'+
+                    '<i class="fa fa-times delete"></i>'+
+                    '<i class="fa fa-angle-up moveUp move" data-id="1"></i>'+
+                    '<i class="fa fa-angle-down moveDown move" data-id="2"></i>'+
+                    '<img src="'+this.img+'" alt="" width="60" height="60">'+
+                    '<textarea name="">'+text +'</textarea></div>'+
+                    '<a href="javascript:void(0)" class="weui-btn weui-btn_plain-primary addFile">'+
+                    '<form class="form-horizontal" enctype="multipart/form-data" method="post" action="javascript:;" role="form">'+
+                    '<i class="fa fa-plus"></i>'+
+                    '<input class="weui-uploader__input" type="file" accept="image/*" name="file" data-type="2">'+    
+                    '</form>'+
+                    '</a>';
+                })
+                $article_content.append(content);
+
+                upDownShowAndHide();
+            } 
+            else 
+            {
+                $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+            }
+        },
+        error: function()
+        {
+            $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+        }
+    });
+}
+
+
+//上传文件
+$("body").on('change',"[name='file']",function()
+{
+    var $this = $(this);
+    var type = $(this).data('type');
+    uploadArticle($this,type);
+})
+
+//点击删除 移动上 移动下
+$article_content.on('click','.delete',function()
+{
+    //编辑的时候 点击删除 得把数据存起来
+    var $this = $(this);
+    if($this.closest(".detail_content").data('id') != -1){
+        delDate.push($this.closest(".detail_content").data('id'));
+    }
+    $this.closest(".detail_content").next("a").remove().end().remove();
+    upDownShowAndHide();
+})
+.on('click','.move',function()
+{
+        var $this = $(this);
+        var type = $this.data('id');
+        changePosition($this,type)
+})
+//返回上一个页面
+$(".headerTop").on('click','.leftPart',function()
+{
+    history.back();
+})
+
+//点击完成
+$("#save").on('click',function()
+{
+
+    var title = $title.prop("value")
+    console.info("进来没");
+    if(title == "")
+    {
+        $.alert("标题不能为空");
+        return;
+    }
+    else
+    {
+        //当前时间戳
+        var timestamp = Date.parse(new Date()); 
+        var parameter = {};
+        var url;
+
+        //文章的基本信息
+        var topInfo = {};
+        topInfo.user_id = userId;
+        topInfo.title = title;
+        topInfo.background_img = $article_top.data("url");
+
+        if(model=="add")
+        {
+            url = '/views/index/addArticle';
+            topInfo.add_time = Tools.getDateTime(timestamp);
+            topInfo.count_of_view = 0;
+            topInfo.count_of_up = 0;
+            topInfo.status = 1;
+        }
+        else
+        {   
+            url = '/views/index/editArticle';
+            topInfo.id = articleId;
+            topInfo.update_time = Tools.getDateTime(timestamp);
+            topInfo.count_of_view = parseInt(count_of_view) + 1;
+            topInfo.count_of_up = count_of_up;
+            topInfo.status = status;
+        }
+
+        //文章基本信息
+        parameter.toInfo = topInfo;
+
+        //文章内容部分
+        var eachData = [],addData = [],updateData = [];
+        var $detail_content = $(".detail_content");
+        $.each($detail_content,function()
+        {
+            var $this = $(this),obj={};
+            var index = parseInt($this.index() / 2);
+            obj.num = index;
+            obj.img = $this.find("img").prop('src');
+            obj.content = $this.find("textarea").prop('value'); 
+            if(model == "edit"){
+                obj.article_id = articleId;
+
+                //新添加的
+                if($this.data('id') == -1)
+                {
+                    addData.push(obj)
+                }
+                else
+                {
+                    obj.id = $this.data('id');
+                    updateData.push(obj);
+                }
+                
+            }
+            else{
+                eachData.push(obj);
+            }
+                     
+        })
+
+        if(model == "add")
+        {
+            parameter.content = eachData;
+        }
+        else
+        {
+            console.info(delDate);
+            parameter.updateData = updateData;
+            parameter.addData = addData;
+            parameter.delDate = delDate;
+        }
+        $.showLoading();
+        //生成游记
+        $.ajax
+        ({
+            url:url,
+            type: 'POST',
+            data: parameter,
+            success: function(data)
+            {
+                $. hideLoading()
+
+                if(200 === data.code) 
+                {
+                    //添加成功后 把文章ID缓存起来
+                    if (data.insertId)
+                    {
+                        $.cookie("articleId",data.insertId);
+                    }
+
+                    $.toast("操作成功",function(){
+                        window.location.href = "articleInfo.html";
+                    });
+                } else {
+                    $.alert("操作失败,请稍后重试");
+                }
+            },
+            error: function(){
+
+                $. hideLoading()
+
+                $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+            }
+        });
+    }
+})
+
+function changePosition($obj,type)
+{
+    var $self = $obj.closest(".detail_content");
+    var $target,tmp = $self.html(),tmpValue = $self.find("textarea").prop("value"),value;
+
+    //移上
+    if(type == 1)
+    {
+        $target = $self.prev('a').prev(".detail_content");
+    }
+    else
+    {
+       $target = $self.next('a').next(".detail_content"); 
+       value  = $target.find("textarea").prop("value");
+    }
+    $self.html($target.html()).find("textarea").prop("value",value);
+    $target.html(tmp).find("textarea").prop("value",tmpValue);
+
+    upDownShowAndHide();
+}
+
+//上传文件 target:input file
+//type：1：（封面） 2：文章内容
+function uploadArticle($target,type)
+{
+     //选择取消 就不请求上传
+    if($target.prop("value").length > 0)
+    {
+        var formData = new FormData($target.closest("form")[0]);  
+        $.ajax
+        ({
+            url:'/uploadArticle',
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(data)
+            {
+                if(200 === data.code) 
+                {
+                    //封面
+                    if(type == 1)
+                    { 
+                        $article_top.css("background-image","url("+data.msg.url+")").data('url',data.msg.url);
+                    }
+                    else
+                    {
+                        var currentContent = '<div class="detail_content" data-id="-1"><i class="fa fa-times delete"></i><i class="fa fa-angle-up moveUp move" data-id="1"></i><i class="fa fa-angle-down moveDown move" data-id="2"></i><img src="'+data.msg.url+'" alt="" width="60" height="60"><textarea name=""></textarea></div>';
+                        $target.closest("a").after(currentContent + $addFileBtn.prop("outerHTML"));
+                        //遍历
+                        upDownShowAndHide();
+
+                    }
+
+                } else {
+                    $.alert("上传失败,请稍后重试");
+                }
+            },
+            error: function(){
+
+                $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+            }
+        });
+    }
+}
+
+function upDownShowAndHide(){
+    var $each = $article_content.find(".detail_content");
+    var len  = $each.length;
+    for(var i = 0; i < len; i++){
+        var $obj = $each[i];
+        if(i == 0){
+            if(len == 1){
+                $($obj).find(".moveUp,.moveDown").addClass("hide");
+            }else{
+                $($obj).find(".moveDown").removeClass("hide").end().find(".moveUp").addClass("hide");
+            }
+        }else if(i == len-1){
+            $($obj).find(".moveUp").removeClass("hide").end().find(".moveDown").addClass("hide");
+        }else{
+            $($obj).find(".moveUp,.moveDown").removeClass("hide");
+        }
+    }
+}
+
+</script>
+</body>
+</html>

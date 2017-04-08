@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+    <title>微官网</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+    <style>
+    .weui-loadmore
+    {
+      padding-bottom: 1.5em;
+      color: #999;
+    }
+    </style>
+</head>
+<body id="indexPage">
+<!--banner-->
+  <div class="swiper-container swiper-container-horizontal">
+      <div class="swiper-container" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="1000">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="img/banner3.png" alt="" width="375" height="200"></div>
+            <div class="swiper-slide"><img src="img/banner1.png" alt="" width="375" height="200"></div>
+            <div class="swiper-slide"><img src="img/banner2.png" alt="" width="375" height="200"></div>
+          </div>
+      </div>
+      <!-- If we need pagination -->
+      <div class="swiper-pagination swiper-pagination-bullets">
+        <span class="swiper-pagination-bullet swiper-pagination-bullet-active"></span>
+        <span class="swiper-pagination-bullet"></span>
+        <span class="swiper-pagination-bullet"></span>
+      </div>
+  </div>
+<!--banner end-->
+<div class="bannerContent">
+  <div class="change-tab">
+    <div class="eachTab"> 
+        最新活动
+    </div>
+    <div class="eachTab"> 
+        徒步攻略
+    </div>
+    <div class="eachTab"> 
+        为您精选
+    </div>
+  </div>
+  <div class="tabContent">
+    <div class="eachContent" id="tab1">
+
+    </div>
+    <div class="eachContent hide" id="tab2">
+
+    </div>
+    <div class="eachContent hide" id="tab3">
+
+    </div>
+  </div>
+</div>
+<!-- body 最后 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/js/swiper.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="../pc/js/tools.js"></script>
+<script src="js/fastclick.js"></script>
+<script type="text/javascript">
+  $(function()
+  {
+    FastClick.attach(document.body);
+    
+    var $page = $("body"),flag = true;
+
+    //缓存当前登录的用户id
+    var $raiderList = $("#tab2");
+    var loadMore = '<div class="weui-loadmore"><span class="weui-loadmore__tips">没有更多数据</span></div>';
+    
+    //tab切换
+    $('.eachTab').on('click', function () 
+    {
+        var $this = $(this);
+        var index = $this.index();
+        $this.addClass('active').siblings('div').removeClass('active');
+        $(".eachContent").eq(index).removeClass("hide").siblings('div').addClass('hide');
+
+        switch(index)
+        {
+          case 0:
+              getActivityList();
+              break;
+          case 1:
+              getRadersList();
+              break;
+          case 2:
+              getRecommendList();
+              break;
+        }
+    });
+
+    //选中第一个
+    $('.eachTab').eq(0).trigger("click");
+
+    //banner切换
+    $(".swiper-container").swiper
+    ({
+      loop: true,
+      autoplay: 10000
+    });
+
+    $raiderList.on("click",'.weui-media-box',function()
+    {
+      var $this = $(this);
+      var id = $this.prop('id');
+      $.ajax
+      ({
+        type:'get',
+        url:'/views/index/addRaiderView',
+        data:{'id':id},
+        success: function(data)
+        {
+          console.info("浏览次数加一")
+        }
+      })
+  })
+  
+  //请求攻略数据
+  function getRadersList()
+  {
+    $.ajax
+    ({
+      type:'get',
+      url:'/views/index/raidersList',
+      success: function(data)
+      {
+        var list = "";
+        if(data.length > 0)
+        {
+          $raiderList.empty();
+
+          //首页只有六条数据
+          $.each(data,function()
+          {
+            var value = this;
+            list += '<div class="weui-media-box weui-media-box_text" id="'+value.id+'">'+
+                    '<a href="'+this.url+'">'+
+                    '<h4 class="weui-media-box__title">'+value.title+'</h4>'+
+                    '<p class="weui-media-box__desc">'+value.summary+'</p>'+
+                    '<div class="weui-flex page flex">'+
+                    '<div class="weui-flex__item">'+
+                    '<div class="placeholder">'+
+                    '<img src="'+value.icon1+'" alt="" class="weui-flex__item"></div></div>'+
+                    '<div class="weui-flex__item">'+
+                    '<div class="placeholder">'+
+                    '<img src="'+value.icon2+'" alt="" class="weui-flex__item"></div></div>'+
+                    '<div class="weui-flex__item">'+
+                    '<div class="placeholder">'+
+                    '<img src="'+value.icon3+'" alt="" class="weui-flex__item"></div></div></div>'+
+                    '<ul class="weui-media-box__info">'+
+                    '<li class="weui-media-box__info__meta">'+value.addtime+'</li>'+
+                    '<li class="weui-media-box__info__meta weui-media-box__info__meta_extra">阅读：'+value.count_of_view+'</li></ul></a></div>'
+          })
+          $raiderList.append(list);
+        }
+        //没有更多数据
+        $raiderList.append(loadMore);
+      }
+
+    })
+  }
+  
+
+  //请求最新活动
+  function getActivityList()
+  {
+
+      if (flag)
+      {
+        $.showLoading();
+        flag = false;
+      }
+
+      $.ajax
+      ({
+        type:'get',
+        url:'/views/index/getActivityList',
+        success: function(data)
+        {
+          $. hideLoading()
+          var $list = $("#tab1");
+          var list = "";
+          if(data.length > 0)
+          {
+            $list.empty()
+            $.each(data,function()
+            {
+              if(this.article_url && this.article_url!= " " )
+              {
+                list += 
+                      '<a href="javascript:void(0)" class="weui-media-box weui-media-box_appmsg newest_activity" data-id='+this.id+' data-url='+this.article_url+' data-price='+this.price+'>'+
+                      '<div class="weui-media-box__hd">'+
+                      '<img class="weui-media-box__thumb" src="'+this.icon+'" width="60" height="60">'+
+                      '</div>'+
+                      '<div class="weui-media-box__bd">'+
+                      '<h4 class="weui-media-box__title">'+this.title+'</h4>'+
+                      '<p class="weui-media-box__desc">'+this.summary+'</p>'+
+                      '</div>'+
+                      '</a>'
+              }
+            })
+            
+            $list.append(list);
+          }
+          $list.append(loadMore);
+        }
+
+      })
+  }
+
+
+  //请求为您推荐
+  function getRecommendList()
+  {
+    $.ajax
+    ({
+      type:'get',
+      url:'/views/index/getRecommendList',
+      success: function(data)
+      {
+        var $list = $("#tab3");
+        var list = "";
+        if(data.length > 0)
+        {
+          $list.empty()
+          $.each(data,function()
+          {
+            list += '<a href="'+this.article_url+'" class="weui-media-box weui-media-box_appmsg">'+
+                    '<div class="weui-media-box__hd">'+
+                    '<img class="weui-media-box__thumb" src="'+this.icon+'" width="60" height="60">'+
+                    '</div>'+
+                    '<div class="weui-media-box__bd">'+
+                    '<h4 class="weui-media-box__title">'+this.title+'</h4>'+
+                    '<p class="weui-media-box__desc">'+this.summary+'</p>'+
+                    '</div>'+
+                    '</a>'
+          })
+          
+          $list.append(list);
+        }
+        $list.append(loadMore);
+      }
+
+    })
+  }
+  
+
+  //点击跳转
+  $("#indexPage").on("click",'a',function() {
+    var $this = $(this);
+    if($this.hasClass('newest_activity')){
+      location.href = $this.data('url');
+        //将活动id缓存起来
+        $.cookie("activityId", $this.data('id'), { path: '/', expiress: 7 })
+        console.info($.cookie("activityId"));
+      }
+    })
+
+  });
+  
+</script>
+</body>
+</html>

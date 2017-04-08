@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+    <title>常用联系人</title>
+    <!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <style>
+    .hasHeaderTop .mainContanier {
+        padding-bottom: 65px;
+    }
+    .weui-cells{
+        margin-top: 0;
+    }
+    .weui-cells .weui-cell__bd .topInfo{
+        font-size: 16px;
+        line-height: 30px;
+    }
+    .weui-cells .weui-cell__bd .secondInfo{
+        font-size: 12px;
+        color: #666;
+        line-height: 20px;
+    }
+    .operate{
+        font-size: 14px;
+        padding: 10px;
+        color: #f59923;
+        padding-left: 45px;
+    }
+    
+    .operate i.delete{
+        font-size: 16px;
+    }
+    .operate i.edit{
+        margin-left: 20px;
+        font-size: 15px;
+    }
+    .aaUserContent{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px;
+        background: #f7f7f7;
+    }
+    .aaUserContent .weui-btn_plain-primary{
+        font-size: 14px;
+        line-height: 40px;
+        border-radius: 0;
+        color: #f59923;
+        border: 1px solid #f59923;
+    }
+    .weui-cells_checkbox .weui-icon-checked:before{
+        font-size: 18px;
+    }
+    .weui-cells:before{
+        border-top: none;
+    }
+    .noData{
+        padding: 20px;
+        text-align: center;
+        color: #ccc;
+    }
+    </style>
+</head>
+<body class="hasHeaderTop">
+    <!--banner-->
+    <div class="headerTop">
+        <div class="leftPart">
+            
+        </div>
+        <div class="title">
+            常用联系人
+        </div>
+        <div class="rightPart">
+            <a href="javascript:;" class="submit"></a>
+        </div>
+    </div>
+    <!--banner end-->
+    <div class="mainContanier">
+        
+    </div>
+    <div class="aaUserContent">
+        <a class="weui-btn weui-btn_plain-primary addUserInfo">
+            + 添加新的联系人    
+        </a>
+    </div>
+
+<!-- body 最后 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/js/swiper.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/fastclick.js"></script>
+<script>
+  $(function() 
+  {
+    FastClick.attach(document.body);
+  });
+</script>
+<script type="text/javascript">
+
+//当前登录的用户Id
+var userId;
+var hre = window.location.href;
+
+if(hre.indexOf("?") != -1)
+{
+    userId = hre.split("?")[1].split("=")[1];
+    $.cookie("userId",userId);
+}
+else
+{
+    userId = $.cookie("userId");
+}
+
+var $mainContanier = $("body");
+
+//上一个页面
+var preurl = $.cookie('prePage');
+if(preurl != "userCenter")
+{
+    $mainContanier.find(".submit").text("完成");
+}
+
+getUserList(userId);
+
+$(".submit").on("click",function()
+{
+    var vadio = $("input[type='checkbox']");
+    var $checkVadio = $("input[type='checkbox']:checked");
+    var len = $checkVadio.length;
+    if(vadio.length == 0)
+    {
+        $.toast("请添加联系人", "text");
+    }
+    else if( len == 0 )
+    {
+        $.toast("请选择联系人", "text");
+    }
+    else
+    {
+        var idArr = [];
+        $.each($checkVadio,function()
+        {
+            var $this = $(this);
+            idArr.push($this.closest(".weui-cells_checkbox").data('id'));
+        })
+        //将选择的用户信息存起来
+        $.cookie('userIdArr',idArr.join(','));
+
+        //跳转到购买界面
+        location.href = '/wx/purchase.html'
+    }
+})
+
+
+//删除和编辑联系人
+$mainContanier.on("click",".deletePart",function(ev)
+{
+    var $this = $(this);
+    var id = $this.closest(".weui-cells").data('id');
+    $.confirm("确定要删除该联系人信息？",function()
+    {
+         $.ajax
+         ({
+            url:'/views/index/deleteClient',
+            type: 'POST',
+            data: {'id':id},
+            success: function(data)
+            {
+                if(200 === data.code) 
+                {
+                    $.alert("删除成功",function()
+                    {
+                        getUserList(userId);
+                    })
+                } else 
+                {
+                    $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+                }
+            // console.log('imgUploader upload success, data:', data);
+            },
+            error: function()
+            {
+                $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+            }
+        });
+    })
+})
+//编辑联系人
+.on("click",".editPart",function(ev)
+{
+    var $this = $(this);
+    var id = $this.closest(".weui-cells").data('id');
+    $.cookie("model","edit");
+    $.cookie("client_id",id);
+    location.href = "addUserInfo.html"
+})
+//添加新的联系人
+.on("click",".addUserInfo",function()
+{
+    $.cookie("model","add");
+    location.href = "addUserInfo.html"
+})
+
+
+//获得当前登录用户已经添加过的用户信息列表
+function getUserList(userId)
+{
+    $.ajax
+    ({
+        type:'get',
+        url:'/views/index/getUserClientList',
+        data:{'userId':userId},
+        success: function(data)
+        {
+            var $raiderList = $(".mainContanier");
+            var list = "";
+            if(data.length > 0)
+            {
+                $raiderList.empty();
+                //首页只有六条数据
+                $.each(data,function()
+                {
+                    var value = this;
+                    var sex = value.sex == 0 ? '男':'女';
+                    var className = preurl == "userCenter" ? "":"weui-cells_checkbox";
+                    list +=  '<div class="weui-cells '+className+'" data-id='+value.id+'>'+
+                            '<label class="weui-cell weui-check__label" for="s'+value.id+'">'+
+                            '<div class="weui-cell__hd">'+
+                            '<input type="checkbox" name="checkbox1" class="weui-check" id="s'+value.id+'">'+
+                            '<i class="weui-icon-checked"></i></div>'+
+                            '<div class="weui-cell__bd">'+
+                            '<p class="topInfo">'+value.name+'&nbsp;&nbsp;' + sex + '&nbsp;&nbsp;'+value.phone+'</p>'+
+                            '<p class="secondInfo">紧急电话：'+value.merge_phone+'&nbsp;&nbsp;'+value.id_card+'</p></div></label>'+
+                            '<p class="operate">'+
+                            '<span class="deletePart"><i class="fa  fa-trash-o delete"></i>&nbsp;&nbsp;删除</span>'+
+                            '<span class="editPart"><i class="fa  fa-pencil-square-o edit"></i>&nbsp;&nbsp;编辑</span></p></div>'
+                })
+                $raiderList.append(list);
+            }
+            else
+            {
+                $raiderList.append('<p class="noData">没有数据,请添加用户信息</p>'); 
+            }
+        }
+  })
+}
+
+</script>
+</body>
+</html>

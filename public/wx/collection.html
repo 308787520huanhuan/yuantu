@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <title>我的收藏</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimal-ui">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/index.css">
+    <!-- head 中 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/weui/1.1.0/style/weui.min.css">
+    <link href="http://cdn.bootcss.com/jquery-weui/1.0.0-rc.1/css/jquery-weui.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <style>
+    .weui-loadmore{
+      padding-bottom: 1.5em;
+      color: #999;
+    }
+    .noData{
+        padding: 20px;
+        text-align: center;
+        color: #ccc;
+    }
+    .weui-media-box__bd{
+      position: relative;
+    }
+    .weui-media-box__bd .delete{
+      position: absolute;
+      font-size: 20px;
+      top: 35px;
+      right: 20px;
+      color: #f59923;
+    }
+    </style>
+</head>
+<body>
+  <div class="weui-panel__bd">
+    
+  </div>
+
+<!-- body 最后 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/jquery-weui.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/fastclick.js"></script>
+<script>
+  $(function() 
+  {
+    FastClick.attach(document.body);
+
+    //当前登录的用户Id
+    var userId = $.cookie('userId');
+
+    //获得收藏列表
+    getList(userId);
+
+    //详情
+    $("body").on("click",'.newest_activity',function(ev)
+    {
+      var $this = $(this);
+      //将活动id缓存起来
+      $.cookie('activityId', $this.data('id'),{ path: '/', expiress: 7 });
+
+      location.href = "productDetail.html";
+    })
+    //删除
+    .on("click",".delete",function(ev)
+    {
+        var id = $(this).closest(".newest_activity").data("id");
+        $.confirm("确定要删除该收藏吗？",function()
+        {
+          $.ajax
+            ({
+              url:'/views/index/deleteCollection',
+              type: 'POST',
+              data: {'id':id},
+              success: function(data)
+              {
+                  if(200 === data.code) 
+                  {
+                      $.alert("删除成功",function()
+                      {
+                          window.location.reload();
+                      })
+                  } else 
+                  {
+                      $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+                  }
+              // console.log('imgUploader upload success, data:', data);
+              },
+              error: function()
+              {
+                  $.alert("抱歉,服务器在打瞌睡,请稍后重试");
+              }
+          });
+        });
+        ev.stopPropagation();
+    })
+
+    function getList(userId)
+    {
+        $.ajax
+        ({
+          type:'get',
+          url:'/views/index/getCollection',
+          data:{'id':userId},
+          success: function(data){
+            var $list = $(".weui-panel__bd");
+            var list = "";
+            if(data.length > 0){
+              $list.empty()
+              $.each(data,function(){
+                var price = this.price == 0 ? "暂定" : this.price + " 元 / 人"
+                list += '<div class="weui-media-box weui-media-box_appmsg newest_activity" data-id='+this.id+' data-url='+this.article_url+' data-price='+this.price+'>'+
+                        '<div class="weui-media-box__hd">'+
+                        '<img class="weui-media-box__thumb" src="'+this.icon+'" width="60" height="60">'+
+                        '</div>'+
+                        '<div class="weui-media-box__bd"><i class="fa  fa-trash-o delete"></i>'+
+                        '<h4 class="weui-media-box__title">'+this.title+'</h4>'+
+                        '<p class="weui-media-box__desc" style="padding-left:10px;"><p style="color:#f59923;">'+price+'</p><p style="font-size:12px">收藏于 : '+this.add_time+'</p></p>'+
+                        '</div>'+
+                        '</div>'
+              })
+              $list.append(list);
+            }
+            else
+            {
+                $list.append('<p class="noData">您没有收藏过任何活动</p>'); 
+            }
+          }
+      })
+    }
+
+  });
+</script>
+</body>
+</html>
